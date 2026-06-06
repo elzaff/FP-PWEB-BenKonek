@@ -1,0 +1,64 @@
+<?php
+require_once __DIR__ . '/../config/session.php';
+
+$flashMessage = '';
+$flashType = '';
+if (isset($_SESSION['flash_message'])) {
+    $flashMessage = $_SESSION['flash_message'];
+    $flashType    = $_SESSION['flash_type'] ?? 'success';
+    unset($_SESSION['flash_message'], $_SESSION['flash_type']);
+}
+
+$currentUser = getCurrentUser();
+?>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?= htmlspecialchars($pageTitle ?? 'BenKonek') ?> – BenKonek</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color:#0A0A0A;border-bottom:2px solid #FFC107;">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="/index.php" style="color:#FFC107;">
+            <i class="fas fa-music me-2"></i>BenKonek
+        </a>
+        <button class="navbar-toggler border-warning" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navMain">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link" href="/index.php">Beranda</a></li>
+                <li class="nav-item"><a class="nav-link" href="/pages/gigboard.php">GigBoard</a></li>
+                <li class="nav-item"><a class="nav-link" href="/pages/musicians.php">Musisi</a></li>
+            </ul>
+            <ul class="navbar-nav align-items-center">
+                <?php if ($currentUser): ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/pages/dashboard.php">
+                            <i class="fas fa-user-circle me-1 text-warning"></i>
+                            <span class="text-warning"><?= htmlspecialchars($currentUser['name']) ?></span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/pages/logout.php">
+                            <i class="fas fa-sign-out-alt me-1"></i>Keluar
+                        </a>
+                    </li>
+                <?php else: ?>
+                    <li class="nav-item"><a class="nav-link" href="/pages/login.php">Masuk</a></li>
+                    <li class="nav-item ms-2">
+                        <a class="btn btn-warning btn-sm fw-semibold px-3" href="/pages/register.php">Daftar</a>
+                    </li>
+                <?php endif; ?>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container py-4">
