@@ -85,7 +85,7 @@ if ($params) {
         <div class="row g-4">
             <?php foreach ($musicians as $idx => $m): ?>
             <div class="col-md-6 col-xl-4">
-                <article class="card h-100 taped musician-card" data-reveal="<?= ($idx % 6) * 50 ?>" style="transform: rotate(<?= ($idx % 2 == 0 ? '-1.5' : '1.5') ?>deg);">
+                <article class="card h-100 taped musician-card" data-reveal="<?= ($idx % 6) * 50 ?>">
                     <?php if (!empty($m['photo_profile'])): ?>
                     <img src="/assets/images/uploads/<?= htmlspecialchars($m['photo_profile']) ?>"
                          class="musician-card-img" alt="<?= htmlspecialchars($m['full_name']) ?>">

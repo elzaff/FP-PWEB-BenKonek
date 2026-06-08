@@ -8,7 +8,6 @@ $db     = getDB();
 $user   = getCurrentUser();
 $userId = $user['id'];
 
-// ── Handle POST ──────────────────────────────────────────────────────────────
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
 
@@ -25,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!in_array($level, $validLevels)) $level = 'Beginner';
 
         $photoFile = _handlePhotoUpload('mus_');
-        if ($photoFile === false) { /* flash already set */ goto redirect_dash; }
+        if ($photoFile === false) { goto redirect_dash; }
 
         if ($photoFile) {
             $stmt = $db->prepare("
@@ -114,7 +113,6 @@ function _handlePhotoUpload(string $prefix): string|false|null {
     return move_uploaded_file($_FILES['photo']['tmp_name'], $dest) ? $newName : null;
 }
 
-// ── Fetch profile ────────────────────────────────────────────────────────────
 $profile   = [];
 $vacancies = [];
 $stats     = [];
@@ -153,7 +151,6 @@ require_once '../includes/header.php';
 </div>
 
 <?php if ($user['role'] === 'musician'): ?>
-<!-- ── MUSICIAN ── -->
 <?php $profileIncomplete = empty($profile['primary_instrument']) || empty($profile['whatsapp_number']); ?>
 <?php if ($profileIncomplete): ?>
 <div class="card mb-4 p-4" style="border-color:var(--rust);box-shadow:4px 4px 0 var(--rust);">
@@ -253,7 +250,6 @@ require_once '../includes/header.php';
 </div>
 
 <?php elseif ($user['role'] === 'band'): ?>
-<!-- ── BAND ── -->
 <?php $bandProfileIncomplete = empty($profile['whatsapp_number']) || empty($profile['main_genre']) || empty($profile['basecamp_location']); ?>
 <?php if ($bandProfileIncomplete): ?>
 <div class="card mb-4 p-4" style="border-color:var(--rust);box-shadow:4px 4px 0 var(--rust);">
@@ -347,7 +343,6 @@ require_once '../includes/header.php';
             </form>
         </div>
 
-        <!-- Vacancy list -->
         <div class="card p-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h3 class="h5 mb-0"><i class="fas fa-list me-2"></i>Lowongan Band</h3>
@@ -409,7 +404,23 @@ require_once '../includes/header.php';
 </div>
 
 <?php elseif ($user['role'] === 'admin'): ?>
-<!-- ── ADMIN ── -->
+<div class="card p-4 mb-4">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+        <div>
+            <p class="kicker mb-2">Admin Tools</p>
+            <h3 class="h5 mb-1"><i class="fas fa-shield-alt me-2"></i>Manajemen Akses</h3>
+            <p class="meta mb-0">Kelola akun multi user, role, status aktif, dan cek tabel RBAC tugas PWEB.</p>
+        </div>
+        <div class="d-flex gap-2 flex-wrap">
+            <a href="/pages/users.php" class="btn btn-warning">
+                <i class="fas fa-users-cog me-2"></i>Manajemen User
+            </a>
+            <a href="/pages/rbac.php" class="btn btn-outline-warning">
+                <i class="fas fa-table me-2"></i>Tabel RBAC
+            </a>
+        </div>
+    </div>
+</div>
 <div class="row g-4">
     <?php
     $statItems = [

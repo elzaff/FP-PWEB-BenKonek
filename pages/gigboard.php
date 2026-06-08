@@ -29,11 +29,9 @@ if ($filterCity) {
 
 $whereSQL = implode(' AND ', $where);
 
-// Instruments for dropdown
 $instrResult = $db->query("SELECT DISTINCT needed_instrument FROM vacancies WHERE status='Open' ORDER BY needed_instrument");
 $instruments = $instrResult ? $instrResult->fetch_all(MYSQLI_ASSOC) : [];
 
-// Count
 $countSQL = "SELECT COUNT(*) FROM vacancies v JOIN bands b ON v.band_id=b.id WHERE $whereSQL";
 if ($params) {
     $s = $db->prepare($countSQL); $s->bind_param($types, ...$params); $s->execute();
@@ -43,7 +41,6 @@ if ($params) {
 }
 $totalPages = (int)ceil($totalRows / $perPage);
 
-// Fetch page
 $allParams = array_merge($params, [$perPage, $offset]);
 $allTypes  = $types . 'ii';
 $sql = "SELECT v.*, b.band_name, b.basecamp_location, b.whatsapp_number, b.main_genre
@@ -60,9 +57,7 @@ $pageUrl = function(int $p) use ($filterInstrument, $filterCity): string {
 ?>
 
 <div class="row">
-    <!-- Filter sidebar -->
     <div class="col-lg-3 mb-4">
-        <!-- Mobile toggle — hidden on lg+ -->
         <button class="btn btn-outline-secondary btn-sm w-100 d-lg-none mb-2" type="button"
                 data-bs-toggle="collapse" data-bs-target="#filterPanel"
                 aria-expanded="<?= ($filterInstrument || $filterCity) ? 'true' : 'false' ?>"
@@ -106,14 +101,12 @@ $pageUrl = function(int $p) use ($filterInstrument, $filterCity): string {
         </div>
     </div>
 
-    <!-- Main -->
     <div class="col-lg-9">
         <div class="section-head">
             <h2 class="section-title"><i class="fas fa-bullhorn me-2"></i>GigBoard</h2>
             <span class="count"><?= $totalRows ?> lowongan</span>
         </div>
 
-        <!-- Realtime search -->
         <div class="mb-4">
             <div class="input-group">
                 <span class="input-group-text"><i class="fas fa-search"></i></span>
@@ -134,8 +127,7 @@ $pageUrl = function(int $p) use ($filterInstrument, $filterCity): string {
             <?php foreach ($vacancies as $v): ?>
             <article class="card mb-4 vacancy-card"
                  data-title="<?= htmlspecialchars(mb_strtolower($v['title'])) ?>"
-                 data-desc="<?= htmlspecialchars(mb_strtolower($v['description'] ?? '')) ?>"
-                 style="transform: rotate(<?= ($v['id'] % 2 === 0 ? '0.5' : '-0.5') ?>deg);">
+                 data-desc="<?= htmlspecialchars(mb_strtolower($v['description'] ?? '')) ?>">
                 <div class="card-body">
                     <div class="d-flex align-items-start">
                         <div class="flex-grow-1">
@@ -180,7 +172,6 @@ $pageUrl = function(int $p) use ($filterInstrument, $filterCity): string {
             <?php endforeach; ?>
         </div>
 
-        <!-- Pagination -->
         <?php if ($totalPages > 1): ?>
         <nav class="mt-4">
             <ul class="pagination justify-content-center">

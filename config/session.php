@@ -26,6 +26,16 @@ function requireRole(string $role): void {
     }
 }
 
+function requireAdmin(): void {
+    requireLogin();
+    if (($_SESSION['role'] ?? '') !== 'admin') {
+        $_SESSION['flash_message'] = 'Halaman ini khusus admin.';
+        $_SESSION['flash_type']    = 'error';
+        header('Location: /index.php');
+        exit;
+    }
+}
+
 function getCurrentUser(): ?array {
     if (!isLoggedIn()) return null;
     return [

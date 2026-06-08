@@ -8,7 +8,6 @@ requireRole('band');
 $db     = getDB();
 $userId = $_SESSION['user_id'];
 
-// Must have band profile first
 $stmt = $db->prepare("SELECT id FROM bands WHERE user_id = ?");
 $stmt->bind_param("i", $userId); $stmt->execute();
 $band = $stmt->get_result()->fetch_assoc();
@@ -25,7 +24,6 @@ $vacancy = null;
 $isEdit  = false;
 $errors  = [];
 
-// Handle delete via POST+CSRF
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'delete_vacancy') {
     verifyCsrf();
     $delId = (int)($_POST['vacancy_id'] ?? 0);
@@ -38,7 +36,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'delet
     header('Location: /pages/dashboard.php'); exit;
 }
 
-// Load vacancy for edit
 if ($editId) {
     $s = $db->prepare("SELECT * FROM vacancies WHERE id=? AND band_id=?");
     $s->bind_param("ii", $editId, $bandId); $s->execute();

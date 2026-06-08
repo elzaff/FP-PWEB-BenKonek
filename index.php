@@ -22,7 +22,6 @@ $totalBands     = $db->query("SELECT COUNT(*) FROM bands")->fetch_row()[0] ?? 0;
 $totalVacancies = $db->query("SELECT COUNT(*) FROM vacancies WHERE status='Open'")->fetch_row()[0] ?? 0;
 ?>
 
-<!-- ── HERO: gig poster (full-bleed) ── -->
 <section class="hero overflow-hidden">
     <div class="container position-relative">
         <div class="hero__layout">
@@ -62,7 +61,6 @@ $totalVacancies = $db->query("SELECT COUNT(*) FROM vacancies WHERE status='Open'
     </div>
 </section>
 
-<!-- ── TICKER: scrolling counts (replaces centered stat trio) ── -->
 <div class="ticker" aria-label="Statistik BenKonek">
     <div class="ticker__track">
         <span><b><?= (int)$totalMusicians ?></b> Musisi Terdaftar</span><span><i>/</i></span>
@@ -88,7 +86,7 @@ $totalVacancies = $db->query("SELECT COUNT(*) FROM vacancies WHERE status='Open'
 <div class="row g-4 mb-4">
     <?php foreach ($vacancies as $i => $v): ?>
     <div class="col-md-6 col-lg-4">
-        <article class="card h-100 vacancy-card" data-reveal="<?= $i * 60 ?>" style="--card-tilt: <?= ($i % 2 == 0 ? '-1.5' : '1.5') ?>deg;">
+        <article class="card h-100 vacancy-card" data-reveal="<?= $i * 60 ?>">
             <div class="card-body d-flex flex-column">
                 <div class="d-flex justify-content-between align-items-start mb-2">
                     <span class="badge bg-warning"><?= htmlspecialchars($v['project_type']) ?></span>

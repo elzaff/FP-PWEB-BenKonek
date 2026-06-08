@@ -32,11 +32,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors[] = 'Email sudah terdaftar.';
         } else {
             $hash  = password_hash($pass, PASSWORD_DEFAULT);
-            $stmt2 = $db->prepare("INSERT INTO users (email, password_hash, role) VALUES (?, ?, ?)");
-            $stmt2->bind_param("sss", $email, $hash, $role);
+            $stmt2 = $db->prepare("INSERT INTO users (full_name, email, password_hash, role) VALUES (?, ?, ?, ?)");
+            $stmt2->bind_param("ssss", $name, $email, $hash, $role);
             if ($stmt2->execute()) {
                 $newUserId = $db->insert_id;
-                // Create minimal profile so session name works after first login
                 if ($role === 'musician') {
                     $sp = $db->prepare("INSERT INTO musicians (user_id, full_name) VALUES (?, ?)");
                     $sp->bind_param("is", $newUserId, $name);

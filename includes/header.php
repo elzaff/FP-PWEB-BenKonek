@@ -42,6 +42,10 @@ $currentUser = getCurrentUser();
                 <li class="nav-item"><a class="nav-link <?= ($currentPath === '/index.php' || $currentPath === '/') ? 'active' : '' ?>" href="/index.php">Beranda</a></li>
                 <li class="nav-item"><a class="nav-link <?= (strpos($currentPath, '/pages/gigboard') === 0) ? 'active' : '' ?>" href="/pages/gigboard.php">GigBoard</a></li>
                 <li class="nav-item"><a class="nav-link <?= (strpos($currentPath, '/pages/musicians') === 0) ? 'active' : '' ?>" href="/pages/musicians.php">Musisi</a></li>
+                <?php if ($currentUser && $currentUser['role'] === 'admin'): ?>
+                <li class="nav-item"><a class="nav-link <?= (strpos($currentPath, '/pages/users') === 0) ? 'active' : '' ?>" href="/pages/users.php">User</a></li>
+                <li class="nav-item"><a class="nav-link <?= (strpos($currentPath, '/pages/rbac') === 0) ? 'active' : '' ?>" href="/pages/rbac.php">RBAC</a></li>
+                <?php endif; ?>
             </ul>
             <ul class="navbar-nav align-items-center">
                 <?php if ($currentUser): ?>

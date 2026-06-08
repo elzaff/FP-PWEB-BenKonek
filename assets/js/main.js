@@ -1,4 +1,4 @@
-/* BenKonek — vanilla JS. Palette matches v2 retro/newsprint design system. */
+
 
 var BK = {
     paper: '#efe7d3',
@@ -7,7 +7,7 @@ var BK = {
     muted: '#6b6151'
 };
 
-/* Open WhatsApp with a prefilled message. Called from listing/contact buttons. */
+
 function hubungiWhatsApp(nomor, namaTarget, judul) {
     if (!nomor) {
         Swal.fire({
@@ -23,7 +23,7 @@ function hubungiWhatsApp(nomor, namaTarget, judul) {
     window.open('https://wa.me/' + cleaned + '?text=' + pesan, '_blank');
 }
 
-/* Confirm-then-delete dialog (GET redirect, kept for backward compat). */
+
 function konfirmasiHapus(url, pesan) {
     pesan = pesan || 'Data ini akan dihapus permanen!';
     Swal.fire({
@@ -43,7 +43,7 @@ function konfirmasiHapus(url, pesan) {
     });
 }
 
-/* Confirm-then-submit a POST form (CSRF-safe delete). */
+
 function konfirmasiHapusForm(formId, pesan) {
     pesan = pesan || 'Data ini akan dihapus permanen!';
     Swal.fire({
@@ -69,7 +69,7 @@ function konfirmasiHapusForm(formId, pesan) {
 document.addEventListener('DOMContentLoaded', function () {
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    /* Marquee: duplicate the track once so the -50% loop is seamless. */
+
     if (!reduce) {
         document.querySelectorAll('.ticker__track').forEach(function (track) {
             if (track.dataset.cloned) return;
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    /* Prevent double-submit on all POST forms. */
+
     document.querySelectorAll('form[method="POST"]').forEach(function (form) {
         form.addEventListener('submit', function () {
             if (form.dataset.submitted) return;
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    /* Reveal-on-scroll: content is visible by default (CSS), this only enhances. */
+
     var reveal = document.querySelectorAll('[data-reveal]');
     if (reveal.length) {
         if (reduce || !('IntersectionObserver' in window)) {

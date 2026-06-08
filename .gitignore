@@ -1,13 +1,7 @@
-# Dependencies / env
+# Environment
 .env
 .env.*
 config/database.php
-
-# Claude Code local settings (contains personal data)
-.claude/settings.local.json
-.claude
-.gemini
-design
 
 # OS
 .DS_Store
@@ -29,6 +23,8 @@ error_log
 /storage/
 /tmp/
 
-# Uploads (if any)
+# Runtime uploads
 /uploads/
 /public/uploads/
+/assets/images/uploads/*
+!/assets/images/uploads/.gitkeep

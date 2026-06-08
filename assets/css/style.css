@@ -1,10 +1,7 @@
-/* ============================================================================
-   BenKonek — v2 Retro Analog / Newsprint
-   Custom CSS3 is the character layer. Bootstrap supplies grid + behavior only.
-   ========================================================================== */
+
 
 :root {
-    /* ---- Ink on paper ---- */
+
     --paper:      #efe7d3;
     --paper-2:    #e6dcc2;
     --paper-3:    #dccfb0;
@@ -13,7 +10,7 @@
     --ink-faint:  #6b6151;
     --line:       #211c17;
 
-    /* ---- Spot inks ---- */
+
     --rust:       #cf3f17;
     --rust-deep:  #a8300f;
     --teal:       #1c6e64;
@@ -23,32 +20,32 @@
     --wa-deep:    #245f3f;
     --danger:     #b3271e;
 
-    /* ---- Type ---- */
+
     --font-display: "Bricolage Grotesque", "Spline Sans", system-ui, sans-serif;
     --font-body:    "Spline Sans", system-ui, -apple-system, sans-serif;
     --font-mono:    "Spline Sans Mono", ui-monospace, "Courier New", monospace;
     --font-hand:    "Gochi Hand", cursive;
 
-    /* ---- Radius (rectangular by default) ---- */
+
     --r-sm: 1px;
     --r-md: 1px;
 
-    /* ---- Hard offset shadow (more aggressive for zine look) ---- */
+
     --shadow-ink:   6px 6px 0 var(--ink);
     --shadow-rust:  6px 6px 0 var(--rust);
     --shadow-teal:  6px 6px 0 var(--teal);
     --shadow-sm:    3px 3px 0 var(--ink);
 
-    /* ---- Motion ---- */
+
     --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 
-    /* ---- z-scale ---- */
+
     --z-nav: 1000;
     --z-dropdown: 1100;
     --z-toast: 1300;
 }
 
-/* ---------------------------------------------------------------- Base ---- */
+
 
 *, *::before, *::after { box-sizing: border-box; }
 
@@ -56,14 +53,14 @@ html { scroll-behavior: smooth; }
 
 body {
     background-color: var(--paper);
-    /* newsprint grain */
+
     background-image:
         url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.085'/%3E%3C/svg%3E");
     color: var(--ink);
     font-family: var(--font-body);
     font-size: 1rem;
     line-height: 1.6;
-    overflow-x: hidden; /* guard full-bleed breakout */
+    overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
 }
@@ -84,18 +81,18 @@ h1, h2, h3, h4, h5, h6 {
     text-wrap: balance;
 }
 
-/* shared mono label voice */
+
 .kicker, .catalog-no, .stamp, .badge-instrument, .badge, .ticker, .form-label,
 .navbar .nav-link, .meta {
     font-family: var(--font-mono);
 }
 
-/* -------------------------------------------------------------- Layout ---- */
+
 
 .container { max-width: 1140px; }
 .container.py-4 { padding-top: 2rem !important; padding-bottom: 3rem !important; }
 
-/* ---- Section head: ruled divider + display title ---- */
+
 .section-head {
     display: flex;
     align-items: baseline;
@@ -124,7 +121,7 @@ h2.section-title {
     text-transform: uppercase;
     white-space: nowrap;
 }
-h2.section-title { /* legacy hook from v1 markup */
+h2.section-title {
     border-bottom: 3px solid var(--line);
     padding-bottom: .5rem;
     margin-bottom: 1.5rem;
@@ -145,7 +142,7 @@ h2.section-title { /* legacy hook from v1 markup */
 .border-bottom { border-bottom: 2px solid var(--line) !important; }
 .border-dashed { border-style: dashed !important; border-width: 1.5px !important; }
 
-/* ---------------------------------------------------------------- Nav ---- */
+
 
 .navbar {
     background-color: var(--paper) !important;
@@ -185,14 +182,14 @@ h2.section-title { /* legacy hook from v1 markup */
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='%23211c17' stroke-width='2.5' stroke-linecap='round' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
 }
 
-/* --------------------------------------------------------------- Hero ---- */
+
 
 .hero {
     position: relative;
     background: var(--ink);
     color: var(--paper);
     border-bottom: 4px solid var(--line);
-    /* full-bleed out of header's centered .container, cancel its top padding */
+
     width: 100vw;
     margin-left: calc(50% - 50vw);
     margin-right: calc(50% - 50vw);
@@ -201,7 +198,7 @@ h2.section-title { /* legacy hook from v1 markup */
     padding: clamp(2.5rem, 7vw, 5rem) 0 clamp(2.5rem, 6vw, 4rem);
     overflow: hidden;
 }
-.hero::before { /* halftone dot field */
+.hero::before {
     content: "";
     position: absolute; inset: 0;
     background-image: radial-gradient(var(--paper) 1.1px, transparent 1.2px);
@@ -241,7 +238,7 @@ h2.section-title { /* legacy hook from v1 markup */
     max-width: 52ch;
     margin-bottom: 1.75rem;
 }
-/* Hero button overrides: hero bg is --ink, so default btn-warning (also --ink bg) is invisible */
+
 .hero .btn-warning {
     background-color: var(--paper);
     border-color: var(--paper);
@@ -262,7 +259,7 @@ h2.section-title { /* legacy hook from v1 markup */
 }
 .hero .btn-outline-warning:hover { background: var(--paper); color: var(--ink); box-shadow: var(--shadow-rust); }
 
-/* ---- Ticker: replaces v1 centered stat trio ---- */
+
 .ticker {
     background: var(--mustard);
     color: var(--ink);
@@ -292,7 +289,7 @@ h2.section-title { /* legacy hook from v1 markup */
 @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 .ticker:hover .ticker__track { animation-play-state: paused; }
 
-/* -------------------------------------------------------------- Cards ---- */
+
 
 .card {
     background-color: var(--paper);
@@ -304,7 +301,7 @@ h2.section-title { /* legacy hook from v1 markup */
 .card-title { font-family: var(--font-display); color: var(--ink); }
 .card-footer { background: transparent !important; border-top: 1.5px dashed var(--ink) !important; }
 
-/* classified-ad listing */
+
 .vacancy-card {
     transition: transform .18s var(--ease-out), box-shadow .18s var(--ease-out), border-color .18s var(--ease-out);
 }
@@ -323,7 +320,7 @@ h2.section-title { /* legacy hook from v1 markup */
     text-transform: uppercase;
 }
 
-/* musician portrait */
+
 .musician-card-img {
     height: 220px; width: 100%; object-fit: cover;
     filter: grayscale(0.35) contrast(1.05) sepia(0.12);
@@ -336,7 +333,7 @@ h2.section-title { /* legacy hook from v1 markup */
     filter: grayscale(0.25) sepia(0.1) contrast(1.05);
 }
 
-/* admin tiles (replaces border-left stat-card) */
+
 .stat-card {
     border: 2px solid var(--line) !important;
     box-shadow: var(--shadow-ink);
@@ -348,7 +345,7 @@ h2.section-title { /* legacy hook from v1 markup */
 }
 .stat-card .display-6 { font-family: var(--font-display); }
 
-/* ------------------------------------------------------------ Buttons ---- */
+
 
 .btn {
     font-family: var(--font-mono);
@@ -363,7 +360,7 @@ h2.section-title { /* legacy hook from v1 markup */
 .btn-lg { font-size: .92rem; padding: .7rem 1.4rem; }
 .btn-sm { font-size: .74rem; }
 
-/* primary */
+
 .btn-warning {
     background-color: var(--ink); border-color: var(--ink); color: var(--paper);
     box-shadow: var(--shadow-rust);
@@ -374,7 +371,7 @@ h2.section-title { /* legacy hook from v1 markup */
 }
 .btn-warning:active { transform: translate(0, 0); box-shadow: 2px 2px 0 var(--rust); }
 
-/* outline */
+
 .btn-outline-warning {
     border-color: var(--ink); color: var(--ink); background: var(--paper);
 }
@@ -394,7 +391,7 @@ h2.section-title { /* legacy hook from v1 markup */
 .btn-outline-danger { border-color: var(--danger); color: var(--danger); background: var(--paper); }
 .btn-outline-danger:hover { background: var(--danger); border-color: var(--danger); color: var(--paper); }
 
-/* WhatsApp */
+
 .btn-success {
     background-color: var(--wa); border-color: var(--wa); color: var(--paper);
     box-shadow: 4px 4px 0 var(--wa-deep);
@@ -404,12 +401,12 @@ h2.section-title { /* legacy hook from v1 markup */
     transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--wa-deep);
 }
 
-/* -------------------------------------------------------------- Tags ---- */
+
 
 .text-warning { color: var(--rust) !important; }
 .border-warning { border-color: var(--ink) !important; }
 
-/* instrument chip — rectangular, mono, outlined */
+
 .badge-instrument {
     background-color: transparent;
     color: var(--rust-deep);
@@ -423,7 +420,7 @@ h2.section-title { /* legacy hook from v1 markup */
     display: inline-block;
 }
 
-/* stamp badge */
+
 .badge {
     font-family: var(--font-mono);
     font-weight: 600;
@@ -440,7 +437,7 @@ h2.section-title { /* legacy hook from v1 markup */
 .badge.bg-success { background-color: var(--wa) !important; color: var(--paper) !important; }
 .badge.bg-secondary { background-color: var(--paper-3) !important; color: var(--ink-soft) !important; border: 1.5px solid var(--ink-faint); }
 
-/* stamp + tape decorative */
+
 .stamp {
     display: inline-block;
     font-family: var(--font-mono);
@@ -451,7 +448,7 @@ h2.section-title { /* legacy hook from v1 markup */
     opacity: .9;
 }
 
-/* -------------------------------------------------------------- Forms ---- */
+
 
 .form-label {
     color: var(--ink-soft);
@@ -487,7 +484,7 @@ select option { background-color: var(--paper); color: var(--ink); }
 .form-check-input:focus { box-shadow: 0 0 0 .2rem rgba(207,63,23,.25); border-color: var(--rust); }
 .form-check-label .text-warning { color: var(--rust) !important; }
 
-/* filter sidebar */
+
 .filter-sidebar {
     background-color: var(--paper);
     border: 2px solid var(--line);
@@ -497,7 +494,7 @@ select option { background-color: var(--paper); color: var(--ink); }
 }
 .filter-sidebar h5 { font-family: var(--font-display); color: var(--ink) !important; text-transform: uppercase; }
 
-/* --------------------------------------------------------- Pagination ---- */
+
 
 .pagination { gap: .35rem; }
 .page-link {
@@ -511,7 +508,7 @@ select option { background-color: var(--paper); color: var(--ink); }
 .page-link:hover { background-color: var(--paper-3); color: var(--ink); border-color: var(--ink); }
 .page-item.active .page-link { background-color: var(--ink); border-color: var(--ink); color: var(--paper); }
 
-/* -------------------------------------------------------------- Table ---- */
+
 
 .table-dark {
     --bs-table-bg: var(--paper);
@@ -530,7 +527,7 @@ select option { background-color: var(--paper); color: var(--ink); }
 }
 .table-dark td { border-color: var(--paper-3); color: var(--ink); }
 
-/* ------------------------------------------------------------- Alerts ---- */
+
 
 .alert {
     border-radius: var(--r-sm);
@@ -544,7 +541,7 @@ select option { background-color: var(--paper); color: var(--ink); }
     box-shadow: 4px 4px 0 var(--danger);
 }
 
-/* --------------------------------------------------------- Empty state ---- */
+
 
 .empty-state {
     border: 2px dashed var(--ink);
@@ -554,7 +551,7 @@ select option { background-color: var(--paper); color: var(--ink); }
 }
 .empty-state i { color: var(--rust); }
 
-/* ------------------------------------------------------------- Footer ---- */
+
 
 footer {
     background-color: var(--ink) !important;
@@ -572,21 +569,21 @@ footer .text-muted { color: var(--paper-3) !important; }
 footer strong { color: var(--mustard) !important; font-family: var(--font-display); letter-spacing: -0.01em; }
 footer i { color: var(--rust) !important; }
 
-/* ----------------------------------------------------- text-muted map ---- */
-/* Many pages use inline color:#9E9E9E (v1). Provide a global muted utility. */
+
+
 .text-muted { color: var(--ink-faint) !important; }
 .meta { color: var(--ink-faint); font-size: .8rem; letter-spacing: .03em; }
 
-/* -------------------------------------------------------- Reveal motion -- */
+
 
 [data-reveal] {
     opacity: 0;
-    transform: translateY(14px) rotate(var(--card-tilt, 0deg));
+    transform: translateY(14px);
     transition: opacity .5s var(--ease-out), transform .5s var(--ease-out);
 }
-[data-reveal].is-in { opacity: 1; transform: translateY(0) rotate(var(--card-tilt, 0deg)); }
+[data-reveal].is-in { opacity: 1; transform: translateY(0); }
 
-/* ------------------------------------------------------- Reduced motion -- */
+
 
 @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
@@ -596,13 +593,13 @@ footer i { color: var(--rust) !important; }
         transition-duration: .001ms !important;
     }
     .ticker__track { animation: none; transform: none; padding-left: 1rem; white-space: normal; }
-    [data-reveal] { opacity: 1; transform: rotate(var(--card-tilt, 0deg)); }
+    [data-reveal] { opacity: 1; transform: none; }
     .vacancy-card:hover, .btn:hover { transform: none; }
 }
 
-/* ----------------------------------------------------------- Responsive -- */
 
-/* Safe-area padding for notched phones */
+
+
 footer { padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 0)) !important; }
 
 @media (max-width: 575.98px) {
@@ -611,7 +608,7 @@ footer { padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 0)) !important;
     .card { box-shadow: 3px 3px 0 var(--ink); }
 }
 
-/* Prevent card flex content from overflowing on 320px screens */
+
 .vacancy-card .card-body > .d-flex > .flex-grow-1 {
     min-width: 0;
     overflow-wrap: break-word;
@@ -622,14 +619,14 @@ footer { padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 0)) !important;
     word-break: break-word;
 }
 
-/* ---------------------------------------------------------- Utilities ---- */
+
 
 .bg-paper-2 { background-color: var(--paper-2) !important; }
 .bg-paper-3 { background-color: var(--paper-3) !important; }
 .shadow-ink  { box-shadow: var(--shadow-ink)  !important; }
 .shadow-rust { box-shadow: var(--shadow-rust) !important; }
 
-/* Tape strip — a translucent strip across the top edge of taped elements */
+
 .taped { position: relative; }
 .taped::before {
     content: "";
@@ -642,7 +639,7 @@ footer { padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 0)) !important;
     pointer-events: none; z-index: 2;
 }
 
-/* Handwritten scribble annotation (Gochi Hand) */
+
 .scribble {
     font-family: var(--font-hand);
     font-size: .88rem;
@@ -653,12 +650,9 @@ footer { padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 0)) !important;
     line-height: 1.2;
 }
 
-/* ================================================================ VINTAGE+ ==
-   Concert-poster hero frame, vinyl record, roundel badge, registration marks,
-   teal accent system for musician surfaces.
-   ========================================================================= */
 
-/* ---- Hero: inner poster-frame border ---- */
+
+
 .hero::after {
     content: "";
     position: absolute;
@@ -668,7 +662,7 @@ footer { padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 0)) !important;
     z-index: 0;
 }
 
-/* ---- Hero: two-column concert-poster layout ---- */
+
 .hero__layout {
     display: flex;
     align-items: center;
@@ -683,7 +677,7 @@ footer { padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 0)) !important;
     justify-content: center;
 }
 
-/* ---- Hero: thin rule between title and lead ---- */
+
 .hero__rule {
     border: none;
     height: 1px;
@@ -693,7 +687,7 @@ footer { padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 0)) !important;
     opacity: 1;
 }
 
-/* ---- Vinyl record ---- */
+
 .vinyl {
     position: relative;
     width: clamp(200px, 20vw, 265px);
@@ -784,7 +778,7 @@ footer { padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 0)) !important;
     .vinyl__label-inner { animation: none; }
 }
 
-/* ---- Roundel badge (circular gig-poster label) ---- */
+
 .roundel {
     width: clamp(60px, 6.5vw, 80px);
     height: clamp(60px, 6.5vw, 80px);
@@ -823,7 +817,7 @@ footer { padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 0)) !important;
     margin-top: 2px;
 }
 
-/* ---- Registration-mark corners on vacancy cards ---- */
+
 .vacancy-card { position: relative; }
 .vacancy-card::before,
 .vacancy-card::after {
@@ -845,19 +839,19 @@ footer { padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 0)) !important;
     border-right: 1.5px solid var(--ink-faint);
 }
 
-/* ---- Teal section-head variant (musicians) ---- */
+
 .section-head.section-teal { border-bottom-color: var(--teal); }
 .section-head.section-teal .section-title,
 .section-head.section-teal h2 { color: var(--teal-deep); }
 .section-head.section-teal .count { color: var(--teal); }
 
-/* ---- Teal instrument badge variant ---- */
+
 .badge-instrument--teal {
     color: var(--teal-deep);
     border-color: var(--teal);
 }
 
-/* ---- Musician card: teal hover accent ---- */
+
 .musician-card {
     transition: transform .18s var(--ease-out), box-shadow .18s var(--ease-out), border-color .18s var(--ease-out);
 }

@@ -15,13 +15,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Email dan password wajib diisi.';
     } else {
         $db   = getDB();
-        $stmt = $db->prepare("SELECT id, password_hash, role FROM users WHERE email = ? AND is_active = 1");
+        $stmt = $db->prepare("SELECT id, full_name, password_hash, role FROM users WHERE email = ? AND is_active = 1");
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $user = $stmt->get_result()->fetch_assoc();
 
         if ($user && password_verify($pass, $user['password_hash'])) {
-            $name = $email;
+            $name = $user['full_name'] ?: $email;
             if ($user['role'] === 'musician') {
                 $s = $db->prepare("SELECT full_name FROM musicians WHERE user_id = ?");
                 $s->bind_param("i", $user['id']); $s->execute();
@@ -32,10 +32,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $s->bind_param("i", $user['id']); $s->execute();
                 $row = $s->get_result()->fetch_assoc();
                 if ($row && $row['band_name']) $name = $row['band_name'];
-            } else {
-                $name = 'Admin';
+            } elseif ($user['role'] === 'admin') {
+                $name = $user['full_name'] ?: 'Admin';
             }
 
+            session_regenerate_id(true);
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['role']    = $user['role'];
             $_SESSION['name']    = $name;
