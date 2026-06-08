@@ -4,6 +4,13 @@ BenKonek adalah aplikasi web untuk mempertemukan musisi dan band. Musisi dapat m
 
 Tagline dari dokumen spesifikasi: **Calling All Musicians, Satu Klik Menuju Band Impianmu**.
 
+## Anggota Kelompok
+
+| Nama | NRP |
+| --- | --- |
+| Fazle Mawla Wahyuhanda | 5054241020 |
+| Muhammad Hisyam Al Arby | 5054241006 |
+
 ## Ringkasan
 
 BenKonek dibuat untuk menjawab masalah konektivitas di skena musik lokal. Pencarian personel band lewat obrolan, grup media sosial, atau rekomendasi teman sering sulit difilter berdasarkan instrumen, lokasi, dan kebutuhan proyek. Aplikasi ini mengubah proses tersebut menjadi direktori dan papan lowongan yang lebih rapi.
