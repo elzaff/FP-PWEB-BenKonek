@@ -17,18 +17,23 @@ $currentUser = getCurrentUser();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($pageTitle ?? 'BenKonek') ?> – BenKonek</title>
+    <meta name="description" content="BenKonek — papan pertemuan musisi & band Indonesia. Cari personel, isi slot, bikin karya.">
+    <meta name="theme-color" content="#efe7d3">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Spline+Sans:wght@400;500;600;700&family=Spline+Sans+Mono:wght@400;500;600&display=swap">
     <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark" style="background-color:#0A0A0A;border-bottom:2px solid #FFC107;">
+<nav class="navbar navbar-expand-lg">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="/index.php" style="color:#FFC107;">
-            <i class="fas fa-music me-2"></i>BenKonek
+        <a class="navbar-brand fw-bold" href="/index.php">
+            <i class="fas fa-record-vinyl me-2"></i>BenKonek
         </a>
-        <button class="navbar-toggler border-warning" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain" aria-label="Buka menu">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navMain">

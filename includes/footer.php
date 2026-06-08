@@ -1,10 +1,12 @@
 </div><!-- /.container -->
 
-<footer class="mt-5 py-4" style="background-color:#0A0A0A;border-top:1px solid #2A2A2A;">
+<footer class="mt-5 py-5">
     <div class="container text-center">
+        <p class="mb-1" style="font-family:var(--font-mono);letter-spacing:.18em;text-transform:uppercase;font-size:.72rem;">
+            <i class="fas fa-record-vinyl me-2"></i>Side B
+        </p>
         <p class="mb-0 text-muted">
-            <i class="fas fa-music me-2" style="color:#FFC107;"></i>
-            <strong style="color:#FFC107;">BenKonek</strong> &copy; <?= date('Y') ?> &ndash; Platform Matchmaking Musisi
+            <strong>BenKonek</strong> &copy; <?= date('Y') ?> &ndash; papan pertemuan musisi &amp; band Indonesia
         </p>
     </div>
 </footer>
@@ -24,8 +26,9 @@ document.addEventListener('DOMContentLoaded', function () {
         showConfirmButton: false,
         timer: 3500,
         timerProgressBar: true,
-        background: '#1E1E1E',
-        color: '#E0E0E0',
+        background: '#efe7d3',
+        color: '#211c17',
+        iconColor: '#cf3f17',
     });
 });
 </script>

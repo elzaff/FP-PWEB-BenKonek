@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $pageTitle = 'Beranda';
 require_once 'config/database.php';
 require_once 'config/session.php';
@@ -8,7 +8,7 @@ $db = getDB();
 
 $vacancies = [];
 $result = $db->query("
-    SELECT v.*, b.band_name, b.basecamp_location, b.whatsapp_number
+    SELECT v.*, b.band_name, b.basecamp_location, b.whatsapp_number, b.main_genre
     FROM vacancies v
     JOIN bands b ON v.band_id = b.id
     WHERE v.status = 'Open'
@@ -22,67 +22,71 @@ $totalBands     = $db->query("SELECT COUNT(*) FROM bands")->fetch_row()[0] ?? 0;
 $totalVacancies = $db->query("SELECT COUNT(*) FROM vacancies WHERE status='Open'")->fetch_row()[0] ?? 0;
 ?>
 
-<div class="hero-section text-center">
+<!-- ── HERO: gig poster (full-bleed) ── -->
+<section class="hero">
     <div class="container">
-        <h1 class="display-4 fw-bold mb-3">
-            <span class="text-warning">Ben</span>Konek
-        </h1>
-        <p class="lead mb-4" style="color:#9E9E9E;">
-            Platform matchmaking musisi – temukan band, temukan musisi, buat karya bersama.
+        <p class="hero__eyebrow">Est. <?= date('Y') ?> · Papan Pertemuan Musisi Indonesia</p>
+        <h1 class="hero__title">Cari band.<br>Cari <span class="accent">personel.</span><br>Bikin karya.</h1>
+        <p class="hero__lead">
+            Band pasang lowongan, musisi pasang lapak. Ketemu di sini, lanjut ngobrol
+            di WhatsApp. Tanpa basa-basi, tanpa algoritma.
         </p>
-        <div class="d-flex justify-content-center gap-3 flex-wrap">
-            <a href="/pages/gigboard.php" class="btn btn-warning btn-lg px-4">
-                <i class="fas fa-guitar me-2"></i>Lihat Lowongan
+        <div class="d-flex gap-3 flex-wrap">
+            <a href="/pages/gigboard.php" class="btn btn-warning btn-lg">
+                <i class="fas fa-bullhorn me-2"></i>Lihat Lowongan
             </a>
-            <a href="/pages/musicians.php" class="btn btn-outline-warning btn-lg px-4">
+            <a href="/pages/musicians.php" class="btn btn-outline-warning btn-lg">
                 <i class="fas fa-users me-2"></i>Cari Musisi
             </a>
         </div>
-        <div class="row justify-content-center mt-5 g-4">
-            <div class="col-auto text-center">
-                <div class="display-6 fw-bold text-warning"><?= $totalMusicians ?></div>
-                <small style="color:#9E9E9E;">Musisi Terdaftar</small>
-            </div>
-            <div class="col-auto text-center px-5">
-                <div class="display-6 fw-bold text-warning"><?= $totalBands ?></div>
-                <small style="color:#9E9E9E;">Band Aktif</small>
-            </div>
-            <div class="col-auto text-center">
-                <div class="display-6 fw-bold text-warning"><?= $totalVacancies ?></div>
-                <small style="color:#9E9E9E;">Lowongan Terbuka</small>
-            </div>
-        </div>
+    </div>
+</section>
+
+<!-- ── TICKER: scrolling counts (replaces centered stat trio) ── -->
+<div class="ticker" aria-label="Statistik BenKonek">
+    <div class="ticker__track">
+        <span><b><?= (int)$totalMusicians ?></b> Musisi Terdaftar</span><span><i>/</i></span>
+        <span><b><?= (int)$totalBands ?></b> Band Aktif</span><span><i>/</i></span>
+        <span><b><?= (int)$totalVacancies ?></b> Lowongan Terbuka</span><span><i>/</i></span>
+        <span>Calling All Musicians</span><span><i>/</i></span>
     </div>
 </div>
 
-<h2 class="section-title"><i class="fas fa-fire me-2"></i>Lowongan Terbaru</h2>
+<div class="section-head">
+    <h2 class="section-title"><i class="fas fa-fire me-2"></i>Lowongan Terbaru</h2>
+    <span class="count"><?= count($vacancies) ?> baru</span>
+</div>
 
 <?php if (empty($vacancies)): ?>
-<div class="text-center py-5 card p-5">
-    <i class="fas fa-music fa-3x mb-3 text-warning"></i>
-    <p style="color:#9E9E9E;">Belum ada lowongan.
-        <a href="/pages/register.php" class="text-warning">Daftar sebagai band</a> dan buat lowongan pertamamu!
+<div class="empty-state text-center p-5">
+    <i class="fas fa-record-vinyl fa-3x mb-3"></i>
+    <p class="text-muted mb-0">Belum ada lowongan.
+        <a href="/pages/register.php">Daftar sebagai band</a> dan pasang yang pertama.
     </p>
 </div>
 <?php else: ?>
 <div class="row g-4 mb-4">
-    <?php foreach ($vacancies as $v): ?>
+    <?php foreach ($vacancies as $i => $v): ?>
     <div class="col-md-6 col-lg-4">
-        <div class="card h-100 vacancy-card">
-            <div class="card-body">
-                <span class="badge bg-warning text-dark mb-2"><?= htmlspecialchars($v['project_type']) ?></span>
-                <h5 class="card-title text-warning"><?= htmlspecialchars($v['title']) ?></h5>
-                <p style="color:#9E9E9E;" class="mb-1"><i class="fas fa-drum me-1"></i><?= htmlspecialchars($v['band_name']) ?></p>
-                <p style="color:#9E9E9E;" class="mb-2"><i class="fas fa-map-marker-alt me-1"></i><?= htmlspecialchars($v['basecamp_location']) ?></p>
-                <span class="badge-instrument"><i class="fas fa-guitar me-1"></i><?= htmlspecialchars($v['needed_instrument']) ?></span>
+        <article class="card h-100 vacancy-card" data-reveal="<?= $i * 60 ?>">
+            <div class="card-body d-flex flex-column">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <span class="badge bg-warning"><?= htmlspecialchars($v['project_type']) ?></span>
+                    <span class="catalog-no">NO. <?= str_pad((string)$v['id'], 3, '0', STR_PAD_LEFT) ?></span>
+                </div>
+                <h3 class="h5 card-title mb-2"><?= htmlspecialchars($v['title']) ?></h3>
+                <p class="meta mb-1"><i class="fas fa-drum me-2"></i><?= htmlspecialchars($v['band_name']) ?></p>
+                <p class="meta mb-3"><i class="fas fa-map-marker-alt me-2"></i><?= htmlspecialchars($v['basecamp_location']) ?></p>
+                <span class="badge-instrument mt-auto"><i class="fas fa-guitar me-1"></i><?= htmlspecialchars($v['needed_instrument']) ?></span>
             </div>
-            <div class="card-footer bg-transparent border-0 d-flex gap-2">
+            <div class="card-footer d-flex gap-2">
                 <a href="/pages/vacancy_detail.php?id=<?= $v['id'] ?>" class="btn btn-sm btn-outline-warning flex-grow-1">Detail</a>
-                <button class="btn btn-sm btn-success" onclick="hubungiWhatsApp('<?= htmlspecialchars($v['whatsapp_number']) ?>','<?= htmlspecialchars(addslashes($v['band_name'])) ?>','<?= htmlspecialchars(addslashes($v['title'])) ?>')">
+                <button class="btn btn-sm btn-success" aria-label="Hubungi via WhatsApp"
+                        onclick="hubungiWhatsApp('<?= htmlspecialchars($v['whatsapp_number']) ?>','<?= htmlspecialchars(addslashes($v['band_name'])) ?>','<?= htmlspecialchars(addslashes($v['title'])) ?>')">
                     <i class="fab fa-whatsapp"></i>
                 </button>
             </div>
-        </div>
+        </article>
     </div>
     <?php endforeach; ?>
 </div>

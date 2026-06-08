@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $pageTitle = 'Lowongan';
 require_once '../config/database.php';
 require_once '../config/session.php';
@@ -82,12 +82,12 @@ require_once '../includes/header.php';
 ?>
 
 <div class="row justify-content-center">
-    <div class="col-md-8 col-lg-7">
-        <div class="card p-4">
-            <h2 class="text-warning mb-4">
-                <i class="fas fa-<?= $isEdit ? 'edit' : 'plus-circle' ?> me-2"></i>
+    <div class="col-md-9 col-lg-7">
+        <div class="card p-4 p-md-5">
+            <p class="kicker mb-3"><i class="fas fa-bullhorn me-1"></i> <?= $isEdit ? 'Ubah Iklan' : 'Pasang Iklan' ?></p>
+            <h1 class="h2 mb-4" style="text-transform:uppercase;letter-spacing:-0.03em;">
                 <?= $isEdit ? 'Edit' : 'Buat' ?> Lowongan
-            </h2>
+            </h1>
 
             <?php if (!empty($errors)): ?>
             <div class="alert alert-danger">
@@ -107,7 +107,7 @@ require_once '../includes/header.php';
                            placeholder="Cari Gitaris untuk Rekaman EP">
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Deskripsi <small style="color:#9E9E9E;">(opsional)</small></label>
+                    <label class="form-label">Deskripsi <span class="text-muted">(opsional)</span></label>
                     <textarea name="description" class="form-control" rows="5"
                               placeholder="Ceritakan tentang band, kebutuhan, ekspektasi..."><?= $formVal('description') ?></textarea>
                 </div>
@@ -133,8 +133,8 @@ require_once '../includes/header.php';
                     </div>
                 </div>
                 <div class="d-flex gap-2">
-                    <button type="submit" class="btn btn-warning fw-semibold">
-                        <i class="fas fa-save me-2"></i><?= $isEdit ? 'Perbarui' : 'Publikasikan' ?> Lowongan
+                    <button type="submit" class="btn btn-warning">
+                        <i class="fas fa-save me-2"></i><?= $isEdit ? 'Perbarui' : 'Publikasikan' ?>
                     </button>
                     <a href="/pages/dashboard.php" class="btn btn-outline-secondary">Batal</a>
                 </div>

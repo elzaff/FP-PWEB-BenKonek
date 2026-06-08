@@ -1,0 +1,33 @@
+# Dependencies / env
+.env
+.env.*
+config/database.php
+
+# Claude Code local settings (contains personal data)
+.claude/settings.local.json
+.claude
+design
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.suo
+*.user
+
+# PHP
+*.log
+error_log
+/vendor/
+
+# Laragon / server
+/storage/
+/tmp/
+
+# Uploads (if any)
+/uploads/
+/public/uploads/

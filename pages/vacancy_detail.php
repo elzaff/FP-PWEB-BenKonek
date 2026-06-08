@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $pageTitle = 'Detail Lowongan';
 require_once '../config/database.php';
 require_once '../config/session.php';
@@ -54,43 +54,52 @@ if ($isOwner) {
 require_once '../includes/header.php';
 ?>
 
+<a href="/pages/gigboard.php" class="btn btn-sm btn-outline-secondary mb-3">
+    <i class="fas fa-arrow-left me-2"></i>Kembali ke GigBoard
+</a>
+
 <div class="row g-4">
     <div class="col-lg-8">
-        <div class="card p-4">
-            <div class="d-flex flex-wrap gap-2 mb-3">
-                <span class="badge bg-warning text-dark"><?= htmlspecialchars($vacancy['project_type']) ?></span>
-                <span class="badge <?= $vacancy['status'] === 'Open' ? 'bg-success' : 'bg-secondary' ?>">
-                    <?= $vacancy['status'] ?>
-                </span>
+        <div class="card p-4 p-md-5">
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+                <div class="d-flex flex-wrap gap-2">
+                    <span class="badge bg-warning"><?= htmlspecialchars($vacancy['project_type']) ?></span>
+                    <span class="badge <?= $vacancy['status'] === 'Open' ? 'bg-success' : 'bg-secondary' ?>">
+                        <?= $vacancy['status'] === 'Open' ? 'Dibuka' : 'Ditutup' ?>
+                    </span>
+                </div>
+                <span class="catalog-no">NO. <?= str_pad((string)$vacancy['id'], 3, '0', STR_PAD_LEFT) ?></span>
             </div>
 
-            <h2 class="text-warning"><?= htmlspecialchars($vacancy['title']) ?></h2>
+            <h1 class="mb-3" style="font-size:clamp(1.6rem,4vw,2.5rem);text-transform:uppercase;letter-spacing:-0.03em;">
+                <?= htmlspecialchars($vacancy['title']) ?>
+            </h1>
 
-            <div class="d-flex flex-wrap gap-3 mb-4 small" style="color:#9E9E9E;">
+            <div class="d-flex flex-wrap gap-3 mb-4 meta">
                 <span><i class="fas fa-drum me-1"></i><?= htmlspecialchars($vacancy['band_name']) ?></span>
                 <span><i class="fas fa-map-marker-alt me-1"></i><?= htmlspecialchars($vacancy['basecamp_location']) ?></span>
                 <span><i class="fas fa-calendar me-1"></i><?= date('d M Y', strtotime($vacancy['created_at'])) ?></span>
             </div>
 
-            <h6 class="text-warning">Instrumen Dibutuhkan</h6>
-            <span class="badge-instrument mb-4 fs-6">
+            <p class="form-label mb-2">Instrumen Dibutuhkan</p>
+            <span class="badge-instrument mb-4" style="font-size:.9rem;padding:.4rem .8rem;">
                 <i class="fas fa-guitar me-2"></i><?= htmlspecialchars($vacancy['needed_instrument']) ?>
             </span>
 
             <?php if ($vacancy['description']): ?>
-            <h6 class="text-warning mt-3">Deskripsi</h6>
-            <p style="color:#C0C0C0;white-space:pre-wrap;"><?= htmlspecialchars($vacancy['description']) ?></p>
+            <p class="form-label mb-2 mt-3">Deskripsi</p>
+            <p style="color:var(--ink-soft);white-space:pre-wrap;"><?= htmlspecialchars($vacancy['description']) ?></p>
             <?php endif; ?>
 
             <?php if ($vacancy['status'] === 'Open'): ?>
-            <button class="btn btn-success btn-lg w-100 mt-2"
+            <button class="btn btn-success btn-lg w-100 mt-3"
                     onclick="hubungiWhatsApp('<?= htmlspecialchars($vacancy['whatsapp_number']) ?>','<?= htmlspecialchars(addslashes($vacancy['band_name'])) ?>','<?= htmlspecialchars(addslashes($vacancy['title'])) ?>')">
                 <i class="fab fa-whatsapp me-2"></i>Hubungi via WhatsApp
             </button>
             <?php endif; ?>
 
             <?php if ($isOwner): ?>
-            <div class="d-flex flex-wrap gap-2 mt-3 pt-3" style="border-top:1px solid #2A2A2A;">
+            <div class="d-flex flex-wrap gap-2 mt-3 pt-3" style="border-top:1.5px dashed var(--ink);">
                 <a href="/pages/vacancy_form.php?id=<?= $id ?>" class="btn btn-outline-warning btn-sm">
                     <i class="fas fa-edit me-1"></i>Edit
                 </a>
@@ -113,23 +122,20 @@ require_once '../includes/header.php';
     </div>
 
     <div class="col-lg-4">
-        <div class="card p-4 mb-3">
-            <h5 class="text-warning mb-3"><i class="fas fa-drum me-2"></i>Tentang Band</h5>
+        <div class="card p-4">
+            <p class="kicker mb-3">Tentang Band</p>
             <?php if (!empty($vacancy['photo_profile'])): ?>
             <img src="/assets/images/uploads/<?= htmlspecialchars($vacancy['photo_profile']) ?>"
-                 class="img-fluid rounded mb-3" style="height:140px;width:100%;object-fit:cover;"
+                 class="img-fluid mb-3" style="height:160px;width:100%;object-fit:cover;border:2px solid var(--ink);border-radius:var(--r-sm);filter:grayscale(.25) sepia(.1);"
                  alt="<?= htmlspecialchars($vacancy['band_name']) ?>">
             <?php endif; ?>
-            <h6 class="mb-1"><?= htmlspecialchars($vacancy['band_name']) ?></h6>
-            <p class="small mb-1" style="color:#9E9E9E;"><i class="fas fa-music me-1"></i><?= htmlspecialchars($vacancy['main_genre']) ?></p>
-            <p class="small mb-1" style="color:#9E9E9E;"><i class="fas fa-map-marker-alt me-1"></i><?= htmlspecialchars($vacancy['basecamp_location']) ?></p>
+            <h2 class="h5 mb-2"><?= htmlspecialchars($vacancy['band_name']) ?></h2>
+            <p class="meta mb-1"><i class="fas fa-music me-1"></i><?= htmlspecialchars($vacancy['main_genre']) ?></p>
+            <p class="meta mb-1"><i class="fas fa-map-marker-alt me-1"></i><?= htmlspecialchars($vacancy['basecamp_location']) ?></p>
             <?php if ($vacancy['formation_year']): ?>
-            <p class="small mb-0" style="color:#9E9E9E;"><i class="fas fa-calendar me-1"></i>Berdiri <?= (int)$vacancy['formation_year'] ?></p>
+            <p class="meta mb-0"><i class="fas fa-calendar me-1"></i>Berdiri <?= (int)$vacancy['formation_year'] ?></p>
             <?php endif; ?>
         </div>
-        <a href="/pages/gigboard.php" class="btn btn-outline-warning w-100">
-            <i class="fas fa-arrow-left me-2"></i>Kembali ke GigBoard
-        </a>
     </div>
 </div>
 

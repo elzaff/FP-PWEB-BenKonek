@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $pageTitle = 'Masuk';
 require_once '../config/database.php';
 require_once '../config/session.php';
@@ -54,14 +54,14 @@ require_once '../includes/header.php';
 ?>
 
 <div class="row justify-content-center">
-    <div class="col-md-5 col-lg-4">
-        <div class="card p-4">
-            <h2 class="text-warning text-center mb-4">
-                <i class="fas fa-sign-in-alt me-2"></i>Masuk
-            </h2>
+    <div class="col-md-6 col-lg-5">
+        <div class="card p-4 p-md-5">
+            <p class="kicker mb-3"><i class="fas fa-record-vinyl me-1"></i> Side A · Masuk</p>
+            <h1 class="h2 mb-1" style="text-transform:uppercase;letter-spacing:-0.03em;">Masuk Lagi</h1>
+            <p class="text-muted mb-4">Lanjutin dari mana kamu berhenti.</p>
 
             <?php if ($error): ?>
-            <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
+            <div class="alert alert-danger"><i class="fas fa-exclamation-triangle me-2"></i><?= htmlspecialchars($error) ?></div>
             <?php endif; ?>
 
             <form method="POST">
@@ -76,10 +76,12 @@ require_once '../includes/header.php';
                     <input type="password" name="password" class="form-control" required
                            placeholder="Password kamu">
                 </div>
-                <button type="submit" class="btn btn-warning w-100 fw-semibold">Masuk</button>
+                <button type="submit" class="btn btn-warning w-100">
+                    <i class="fas fa-sign-in-alt me-2"></i>Masuk
+                </button>
             </form>
-            <p class="text-center mt-3 mb-0" style="color:#9E9E9E;">
-                Belum punya akun? <a href="/pages/register.php" class="text-warning">Daftar</a>
+            <p class="text-center mt-4 mb-0 text-muted">
+                Belum punya akun? <a href="/pages/register.php">Daftar</a>
             </p>
         </div>
     </div>

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $pageTitle = 'Dashboard';
 require_once '../config/database.php';
 require_once '../config/session.php';
@@ -145,9 +145,9 @@ if ($user['role'] === 'musician') {
 require_once '../includes/header.php';
 ?>
 
-<div class="d-flex align-items-center mb-4">
-    <h2 class="text-warning mb-0"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</h2>
-    <span class="ms-3 badge bg-warning text-dark">
+<div class="section-head">
+    <h2 class="section-title"><i class="fas fa-sliders-h me-2"></i>Dashboard</h2>
+    <span class="count">
         <?= $user['role'] === 'musician' ? 'Musisi' : ($user['role'] === 'band' ? 'Band' : 'Admin') ?>
     </span>
 </div>
@@ -161,18 +161,18 @@ require_once '../includes/header.php';
             <img src="/assets/images/uploads/<?= htmlspecialchars($profile['photo_profile']) ?>"
                  class="musician-avatar mx-auto d-block mb-3" alt="Foto Profil">
             <?php else: ?>
-            <div class="bg-secondary rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center"
-                 style="width:120px;height:120px;border:3px solid #FFC107;">
-                <i class="fas fa-user fa-3x" style="color:#9E9E9E;"></i>
+            <div class="mx-auto mb-3 d-flex align-items-center justify-content-center"
+                 style="width:120px;height:120px;border:3px solid var(--ink);border-radius:var(--r-md);background:var(--paper-3);box-shadow:var(--shadow-rust);">
+                <i class="fas fa-user fa-3x" style="color:var(--ink-faint);"></i>
             </div>
             <?php endif; ?>
-            <h6 class="text-warning"><?= htmlspecialchars($profile['full_name'] ?? $user['name']) ?></h6>
-            <small style="color:#9E9E9E;"><?= htmlspecialchars($profile['primary_instrument'] ?? 'Belum diisi') ?></small>
+            <h3 class="h6 mb-1"><?= htmlspecialchars($profile['full_name'] ?? $user['name']) ?></h3>
+            <p class="meta mb-0"><?= htmlspecialchars($profile['primary_instrument'] ?? 'Belum diisi') ?></p>
         </div>
     </div>
     <div class="col-md-9">
         <div class="card p-4">
-            <h5 class="text-warning mb-3"><i class="fas fa-edit me-2"></i>Edit Profil Musisi</h5>
+            <h3 class="h5 mb-3"><i class="fas fa-edit me-2"></i>Edit Profil Musisi</h3>
             <form method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="action" value="save_musician">
                 <div class="row g-3">
@@ -226,7 +226,7 @@ require_once '../includes/header.php';
                         <input type="file" name="photo" class="form-control" accept=".jpg,.jpeg,.png,.webp">
                     </div>
                     <div class="col-12">
-                        <button type="submit" class="btn btn-warning fw-semibold">
+                        <button type="submit" class="btn btn-warning">
                             <i class="fas fa-save me-2"></i>Simpan Profil
                         </button>
                     </div>
@@ -245,13 +245,13 @@ require_once '../includes/header.php';
             <img src="/assets/images/uploads/<?= htmlspecialchars($profile['photo_profile']) ?>"
                  class="musician-avatar mx-auto d-block mb-3" alt="Foto Band">
             <?php else: ?>
-            <div class="bg-secondary rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center"
-                 style="width:120px;height:120px;border:3px solid #FFC107;">
-                <i class="fas fa-users fa-3x" style="color:#9E9E9E;"></i>
+            <div class="mx-auto mb-3 d-flex align-items-center justify-content-center"
+                 style="width:120px;height:120px;border:3px solid var(--ink);border-radius:var(--r-md);background:var(--paper-3);box-shadow:var(--shadow-rust);">
+                <i class="fas fa-users fa-3x" style="color:var(--ink-faint);"></i>
             </div>
             <?php endif; ?>
-            <h6 class="text-warning"><?= htmlspecialchars($profile['band_name'] ?? $user['name']) ?></h6>
-            <small style="color:#9E9E9E;"><?= htmlspecialchars($profile['main_genre'] ?? 'Belum diisi') ?></small>
+            <h3 class="h6 mb-1"><?= htmlspecialchars($profile['band_name'] ?? $user['name']) ?></h3>
+            <p class="meta mb-0"><?= htmlspecialchars($profile['main_genre'] ?? 'Belum diisi') ?></p>
             <?php if (!empty($profile['id'])): ?>
             <a href="/pages/vacancy_form.php" class="btn btn-warning btn-sm mt-3 w-100">
                 <i class="fas fa-plus me-1"></i>Buat Lowongan
@@ -261,7 +261,7 @@ require_once '../includes/header.php';
     </div>
     <div class="col-md-9">
         <div class="card p-4 mb-4">
-            <h5 class="text-warning mb-3"><i class="fas fa-edit me-2"></i>Edit Profil Band</h5>
+            <h3 class="h5 mb-3"><i class="fas fa-edit me-2"></i>Edit Profil Band</h3>
             <form method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="action" value="save_band">
                 <div class="row g-3">
@@ -299,7 +299,7 @@ require_once '../includes/header.php';
                         <input type="file" name="photo" class="form-control" accept=".jpg,.jpeg,.png,.webp">
                     </div>
                     <div class="col-12">
-                        <button type="submit" class="btn btn-warning fw-semibold">
+                        <button type="submit" class="btn btn-warning">
                             <i class="fas fa-save me-2"></i>Simpan Profil
                         </button>
                     </div>
@@ -310,7 +310,7 @@ require_once '../includes/header.php';
         <!-- Vacancy list -->
         <div class="card p-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="text-warning mb-0"><i class="fas fa-list me-2"></i>Lowongan Band</h5>
+                <h3 class="h5 mb-0"><i class="fas fa-list me-2"></i>Lowongan Band</h3>
                 <?php if (!empty($profile['id'])): ?>
                 <a href="/pages/vacancy_form.php" class="btn btn-sm btn-warning">
                     <i class="fas fa-plus me-1"></i>Buat Baru
@@ -318,15 +318,15 @@ require_once '../includes/header.php';
                 <?php endif; ?>
             </div>
             <?php if (empty($vacancies)): ?>
-            <p class="text-center py-3" style="color:#9E9E9E;">
+            <p class="text-center py-3 text-muted">
                 Belum ada lowongan.
                 <?php if (!empty($profile['id'])): ?>
-                <a href="/pages/vacancy_form.php" class="text-warning">Buat sekarang!</a>
+                <a href="/pages/vacancy_form.php">Buat sekarang!</a>
                 <?php endif; ?>
             </p>
             <?php else: ?>
             <div class="table-responsive">
-                <table class="table table-dark table-hover mb-0">
+                <table class="table table-dark table-hover mb-0 align-middle">
                     <thead>
                         <tr><th>Judul</th><th>Instrumen</th><th>Tipe</th><th>Status</th><th>Aksi</th></tr>
                     </thead>
@@ -338,7 +338,7 @@ require_once '../includes/header.php';
                             <td><?= htmlspecialchars($v['project_type']) ?></td>
                             <td>
                                 <span class="badge <?= $v['status'] === 'Open' ? 'bg-success' : 'bg-secondary' ?>">
-                                    <?= $v['status'] ?>
+                                    <?= $v['status'] === 'Open' ? 'Dibuka' : 'Ditutup' ?>
                                 </span>
                             </td>
                             <td class="d-flex gap-1">
@@ -367,15 +367,15 @@ require_once '../includes/header.php';
         ['label'=>'Total User',     'icon'=>'fas fa-users',    'val'=>$stats['users']],
         ['label'=>'Musisi',         'icon'=>'fas fa-guitar',   'val'=>$stats['musicians']],
         ['label'=>'Band',           'icon'=>'fas fa-drum',     'val'=>$stats['bands']],
-        ['label'=>'Lowongan Aktif', 'icon'=>'fas fa-briefcase','val'=>$stats['vacancies']],
+        ['label'=>'Lowongan Aktif', 'icon'=>'fas fa-bullhorn', 'val'=>$stats['vacancies']],
     ];
     foreach ($statItems as $si):
     ?>
     <div class="col-md-3 col-6">
         <div class="card stat-card p-4 text-center">
-            <i class="<?= $si['icon'] ?> fa-2x text-warning mb-2"></i>
-            <div class="display-6 fw-bold text-warning"><?= $si['val'] ?></div>
-            <small style="color:#9E9E9E;"><?= $si['label'] ?></small>
+            <i class="<?= $si['icon'] ?> fa-2x mb-2" style="color:var(--rust);"></i>
+            <div class="display-6 fw-bold"><?= $si['val'] ?></div>
+            <p class="meta mb-0"><?= $si['label'] ?></p>
         </div>
     </div>
     <?php endforeach; ?>

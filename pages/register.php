@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $pageTitle = 'Daftar';
 require_once '../config/database.php';
 require_once '../config/session.php';
@@ -61,11 +61,11 @@ require_once '../includes/header.php';
 ?>
 
 <div class="row justify-content-center">
-    <div class="col-md-6 col-lg-5">
-        <div class="card p-4">
-            <h2 class="text-warning text-center mb-4">
-                <i class="fas fa-user-plus me-2"></i>Daftar Akun
-            </h2>
+    <div class="col-md-7 col-lg-6">
+        <div class="card p-4 p-md-5">
+            <p class="kicker mb-3"><i class="fas fa-pen-nib me-1"></i> Daftar Lapak Baru</p>
+            <h1 class="h2 mb-1" style="text-transform:uppercase;letter-spacing:-0.03em;">Gabung Scene</h1>
+            <p class="text-muted mb-4">Satu menit. Lalu kamu kelihatan di papan.</p>
 
             <?php if (!empty($errors)): ?>
             <div class="alert alert-danger">
@@ -90,15 +90,17 @@ require_once '../includes/header.php';
                            value="<?= htmlspecialchars($formData['email']) ?>" required
                            placeholder="contoh@email.com">
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">Password</label>
-                    <input type="password" name="password" class="form-control" required
-                           placeholder="Minimal 8 karakter">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Konfirmasi Password</label>
-                    <input type="password" name="password_confirm" class="form-control" required
-                           placeholder="Ulangi password">
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Password</label>
+                        <input type="password" name="password" class="form-control" required
+                               placeholder="Minimal 8 karakter">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Konfirmasi Password</label>
+                        <input type="password" name="password_confirm" class="form-control" required
+                               placeholder="Ulangi password">
+                    </div>
                 </div>
                 <div class="mb-4">
                     <label class="form-label">Daftar sebagai</label>
@@ -119,12 +121,12 @@ require_once '../includes/header.php';
                         </div>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-warning w-100 fw-semibold">
-                    Daftar Sekarang
+                <button type="submit" class="btn btn-warning w-100">
+                    <i class="fas fa-bolt me-2"></i>Daftar Sekarang
                 </button>
             </form>
-            <p class="text-center mt-3 mb-0" style="color:#9E9E9E;">
-                Sudah punya akun? <a href="/pages/login.php" class="text-warning">Masuk</a>
+            <p class="text-center mt-4 mb-0 text-muted">
+                Sudah punya akun? <a href="/pages/login.php">Masuk</a>
             </p>
         </div>
     </div>

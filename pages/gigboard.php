@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $pageTitle = 'GigBoard';
 require_once '../config/database.php';
 require_once '../config/session.php';
@@ -63,7 +63,7 @@ $pageUrl = function(int $p) use ($filterInstrument, $filterCity): string {
     <!-- Filter sidebar -->
     <div class="col-lg-3 mb-4">
         <div class="filter-sidebar">
-            <h5 class="text-warning mb-3"><i class="fas fa-filter me-2"></i>Filter</h5>
+            <h5 class="mb-3"><i class="fas fa-filter me-2"></i>Filter</h5>
             <form method="GET">
                 <div class="mb-3">
                     <label class="form-label">Instrumen</label>
@@ -94,13 +94,13 @@ $pageUrl = function(int $p) use ($filterInstrument, $filterCity): string {
 
     <!-- Main -->
     <div class="col-lg-9">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2 class="text-warning mb-0"><i class="fas fa-briefcase me-2"></i>GigBoard</h2>
-            <span style="color:#9E9E9E;"><?= $totalRows ?> lowongan ditemukan</span>
+        <div class="section-head">
+            <h2 class="section-title"><i class="fas fa-bullhorn me-2"></i>GigBoard</h2>
+            <span class="count"><?= $totalRows ?> lowongan</span>
         </div>
 
         <!-- Realtime search -->
-        <div class="mb-3">
+        <div class="mb-4">
             <div class="input-group">
                 <span class="input-group-text"><i class="fas fa-search"></i></span>
                 <input type="text" id="searchInput" class="form-control"
@@ -109,31 +109,30 @@ $pageUrl = function(int $p) use ($filterInstrument, $filterCity): string {
         </div>
 
         <?php if (empty($vacancies)): ?>
-        <div class="card p-5 text-center">
-            <i class="fas fa-search fa-3x mb-3 text-warning"></i>
-            <p style="color:#9E9E9E;">Tidak ada lowongan yang sesuai filter.</p>
+        <div class="empty-state p-5 text-center">
+            <i class="fas fa-search fa-3x mb-3"></i>
+            <p class="text-muted">Tidak ada lowongan yang sesuai filter.</p>
             <a href="/pages/gigboard.php" class="btn btn-outline-warning btn-sm">Lihat Semua</a>
         </div>
         <?php else: ?>
 
         <div id="vacancyList">
             <?php foreach ($vacancies as $v): ?>
-            <div class="card mb-3 vacancy-card"
+            <article class="card mb-3 vacancy-card"
                  data-title="<?= htmlspecialchars(mb_strtolower($v['title'])) ?>"
                  data-desc="<?= htmlspecialchars(mb_strtolower($v['description'] ?? '')) ?>">
                 <div class="card-body">
                     <div class="d-flex align-items-start">
                         <div class="flex-grow-1">
-                            <div class="d-flex align-items-center flex-wrap gap-2 mb-1">
-                                <span class="badge bg-warning text-dark small">
-                                    <?= htmlspecialchars($v['project_type']) ?>
-                                </span>
-                                <a href="/pages/vacancy_detail.php?id=<?= $v['id'] ?>"
-                                   class="text-warning text-decoration-none fw-semibold fs-6">
-                                    <?= htmlspecialchars($v['title']) ?>
-                                </a>
+                            <div class="d-flex align-items-center flex-wrap gap-2 mb-2">
+                                <span class="badge bg-warning"><?= htmlspecialchars($v['project_type']) ?></span>
+                                <span class="catalog-no">NO. <?= str_pad((string)$v['id'], 3, '0', STR_PAD_LEFT) ?></span>
                             </div>
-                            <div class="d-flex flex-wrap gap-3 small mb-2" style="color:#9E9E9E;">
+                            <a href="/pages/vacancy_detail.php?id=<?= $v['id'] ?>"
+                               class="fw-semibold fs-5 d-block mb-2" style="color:var(--ink);font-family:var(--font-display);">
+                                <?= htmlspecialchars($v['title']) ?>
+                            </a>
+                            <div class="d-flex flex-wrap gap-3 meta mb-2">
                                 <span><i class="fas fa-drum me-1"></i><?= htmlspecialchars($v['band_name']) ?></span>
                                 <span><i class="fas fa-map-marker-alt me-1"></i><?= htmlspecialchars($v['basecamp_location']) ?></span>
                                 <span><i class="fas fa-music me-1"></i><?= htmlspecialchars($v['main_genre']) ?></span>
@@ -145,22 +144,22 @@ $pageUrl = function(int $p) use ($filterInstrument, $filterCity): string {
                         <div class="d-flex flex-column gap-2 ms-3">
                             <a href="/pages/vacancy_detail.php?id=<?= $v['id'] ?>"
                                class="btn btn-sm btn-outline-warning">Detail</a>
-                            <button class="btn btn-sm btn-success"
+                            <button class="btn btn-sm btn-success" aria-label="Hubungi via WhatsApp"
                                     onclick="hubungiWhatsApp('<?= htmlspecialchars($v['whatsapp_number']) ?>','<?= htmlspecialchars(addslashes($v['band_name'])) ?>','<?= htmlspecialchars(addslashes($v['title'])) ?>')">
                                 <i class="fab fa-whatsapp me-1"></i>WA
                             </button>
                         </div>
                     </div>
                 </div>
-                <div class="card-footer bg-transparent border-0 d-flex justify-content-between">
-                    <small style="color:#9E9E9E;"><i class="fas fa-clock me-1"></i><?= date('d M Y', strtotime($v['created_at'])) ?></small>
+                <div class="card-footer d-flex justify-content-between meta">
+                    <small><i class="fas fa-clock me-1"></i><?= date('d M Y', strtotime($v['created_at'])) ?></small>
                     <?php if ($v['description']): ?>
-                    <small style="color:#9E9E9E;" class="d-none d-md-block">
+                    <small class="d-none d-md-block">
                         <?= htmlspecialchars(mb_substr($v['description'], 0, 80)) ?><?= mb_strlen($v['description']) > 80 ? '…' : '' ?>
                     </small>
                     <?php endif; ?>
                 </div>
-            </div>
+            </article>
             <?php endforeach; ?>
         </div>
 
