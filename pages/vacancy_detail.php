@@ -83,13 +83,13 @@ require_once '../includes/header.php';
                 <span><i class="fas fa-calendar me-1"></i><?= date('d M Y', strtotime($vacancy['created_at'])) ?></span>
             </div>
 
-            <p class="form-label mb-2">Instrumen Dibutuhkan</p>
+            <p class="form-label mb-2">Dicari</p>
             <span class="badge-instrument mb-4" style="font-size:.9rem;padding:.4rem .8rem;">
                 <i class="fas fa-guitar me-2"></i><?= htmlspecialchars($vacancy['needed_instrument']) ?>
             </span>
 
             <?php if ($vacancy['description']): ?>
-            <p class="form-label mb-2 mt-3">Deskripsi</p>
+            <p class="form-label mb-2 mt-3">Detail</p>
             <p style="color:var(--ink-soft);white-space:pre-wrap;"><?= htmlspecialchars($vacancy['description']) ?></p>
             <?php endif; ?>
 

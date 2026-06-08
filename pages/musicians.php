@@ -38,7 +38,7 @@ if ($params) {
 }
 ?>
 
-<div class="section-head">
+<div class="section-head section-teal">
     <h2 class="section-title"><i class="fas fa-users me-2"></i>Direktori Musisi</h2>
     <span class="count"><?= count($musicians) ?> musisi</span>
 </div>
@@ -85,7 +85,7 @@ if ($params) {
         <div class="row g-4">
             <?php foreach ($musicians as $idx => $m): ?>
             <div class="col-md-6 col-xl-4">
-                <article class="card h-100 taped" data-reveal="<?= ($idx % 6) * 50 ?>" style="transform: rotate(<?= ($idx % 2 == 0 ? '-1.5' : '1.5') ?>deg);">
+                <article class="card h-100 taped musician-card" data-reveal="<?= ($idx % 6) * 50 ?>" style="transform: rotate(<?= ($idx % 2 == 0 ? '-1.5' : '1.5') ?>deg);">
                     <?php if (!empty($m['photo_profile'])): ?>
                     <img src="/assets/images/uploads/<?= htmlspecialchars($m['photo_profile']) ?>"
                          class="musician-card-img" alt="<?= htmlspecialchars($m['full_name']) ?>">
@@ -101,9 +101,8 @@ if ($params) {
                                 NO. <?= str_pad((string)$m['id'], 3, '0', STR_PAD_LEFT) ?>
                             </span>
                         </div>
-                        </div>
                         <?php if ($m['primary_instrument']): ?>
-                        <span class="badge-instrument mb-2">
+                        <span class="badge-instrument badge-instrument--teal mb-2">
                             <i class="fas fa-guitar me-1"></i><?= htmlspecialchars($m['primary_instrument']) ?>
                         </span>
                         <?php endif; ?>

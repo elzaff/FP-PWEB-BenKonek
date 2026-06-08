@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $sp->bind_param("is", $newUserId, $name);
                     $sp->execute();
                 }
-                $_SESSION['flash_message'] = 'Registrasi berhasil! Silakan login.';
+                $_SESSION['flash_message'] = 'Akun dibuat. Sekarang masuk.';
                 $_SESSION['flash_type']    = 'success';
                 header('Location: /pages/login.php');
                 exit;
@@ -62,13 +62,10 @@ require_once '../includes/header.php';
 
 <div class="row justify-content-center">
     <div class="col-md-8 col-lg-7">
-        <div class="card taped p-4 p-md-5 position-relative" style="transform: rotate(1deg);">
-            <div class="scribble position-absolute d-none d-md-block" aria-hidden="true" style="bottom: 40px; right: -40px; transform: rotate(-8deg); width: 140px;">
-                Gabung skena, cari kawan! →
-            </div>
-            <p class="kicker mb-3"><i class="fas fa-user-plus me-1"></i> Side B · Daftar</p>
-            <h1 class="h2 mb-1" style="text-transform:uppercase;letter-spacing:-0.03em;">Daftar Akun</h1>
-            <p class="text-muted mb-4">Satu menit. Lalu kamu kelihatan di papan.</p>
+        <div class="card taped p-4 p-md-5 position-relative">
+            <p class="kicker mb-3"><i class="fas fa-user-plus me-1"></i> Side B · Sign Up</p>
+            <h1 class="h2 mb-1" style="text-transform:uppercase;letter-spacing:-0.03em;">Join the Scene</h1>
+            <p class="text-muted mb-4">Daftar sekarang, langsung kelihatan di board.</p>
 
             <?php if (!empty($errors)): ?>
             <div class="alert alert-danger">
@@ -127,7 +124,7 @@ require_once '../includes/header.php';
                     </div>
                 </div>
                 <button type="submit" class="btn btn-warning w-100">
-                    <i class="fas fa-bolt me-2"></i>Daftar Sekarang
+                    <i class="fas fa-bolt me-2"></i>Buat Akun
                 </button>
             </form>
             <p class="text-center mt-4 mb-0 text-muted">

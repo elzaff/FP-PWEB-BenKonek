@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['role']    = $user['role'];
             $_SESSION['name']    = $name;
 
-            $_SESSION['flash_message'] = 'Selamat datang, ' . $name . '!';
+            $_SESSION['flash_message'] = 'Yo, ' . $name . '!';
             $_SESSION['flash_type']    = 'success';
             header('Location: /pages/dashboard.php');
             exit;
@@ -55,12 +55,9 @@ require_once '../includes/header.php';
 
 <div class="row justify-content-center">
     <div class="col-md-6 col-lg-5">
-        <div class="card taped p-4 p-md-5 position-relative" style="transform: rotate(-1.5deg);">
-            <div class="scribble position-absolute" style="top: -20px; right: -10px; transform: rotate(12deg);">
-                *Masuk sini, Fren!
-            </div>
-            <p class="kicker mb-3"><i class="fas fa-record-vinyl me-1"></i> Side A · Masuk</p>
-            <h1 class="h2 mb-1" style="text-transform:uppercase;letter-spacing:-0.03em;">Masuk Lagi</h1>
+        <div class="card taped p-4 p-md-5 position-relative">
+            <p class="kicker mb-3"><i class="fas fa-record-vinyl me-1"></i> Side A · Login</p>
+            <h1 class="h2 mb-1" style="text-transform:uppercase;letter-spacing:-0.03em;">Back In</h1>
             <p class="text-muted mb-4">Lanjutin dari mana kamu berhenti.</p>
 
             <?php if ($error): ?>

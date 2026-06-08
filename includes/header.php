@@ -17,7 +17,7 @@ $currentUser = getCurrentUser();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title><?= htmlspecialchars($pageTitle ?? 'BenKonek') ?> – BenKonek</title>
-    <meta name="description" content="BenKonek — papan pertemuan musisi & band Indonesia. Cari personel, isi slot, bikin karya.">
+    <meta name="description" content="BenKonek — tempat ketemu musisi & band Indonesia. Cari personel, isi slot, bikin karya.">
     <meta name="theme-color" content="#efe7d3">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">

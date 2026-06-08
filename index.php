@@ -25,22 +25,39 @@ $totalVacancies = $db->query("SELECT COUNT(*) FROM vacancies WHERE status='Open'
 <!-- ── HERO: gig poster (full-bleed) ── -->
 <section class="hero overflow-hidden">
     <div class="container position-relative">
-        <div class="scribble position-absolute d-none d-lg-block" aria-hidden="true" style="top: -20px; right: 20px; transform: rotate(5deg);">
-            *Scene built, by hand!
-        </div>
-        <p class="hero__eyebrow">Est. <?= date('Y') ?> · Papan Pertemuan Musisi Indonesia</p>
-        <h1 class="hero__title">Cari band.<br>Cari <span class="accent">personel.</span><br>Bikin karya.</h1>
-        <div class="hero__lead taped p-3 bg-paper-2 mb-4 d-inline-block">
-            Band pasang lowongan, musisi pasang lapak. Ketemu di sini, lanjut ngobrol
-            di WhatsApp. Tanpa basa-basi, tanpa algoritma.
-        </div>
-        <div class="d-flex gap-3 flex-wrap">
-            <a href="/pages/gigboard.php" class="btn btn-warning btn-lg shadow-ink">
-                <i class="fas fa-bullhorn me-2"></i>Lihat Lowongan
-            </a>
-            <a href="/pages/musicians.php" class="btn btn-outline-warning btn-lg shadow-ink">
-                <i class="fas fa-users me-2"></i>Cari Musisi
-            </a>
+        <div class="hero__layout">
+            <div class="hero__content">
+                <p class="hero__eyebrow">Est. <?= date('Y') ?> · Indonesian Music Scene</p>
+                <h1 class="hero__title">Cari band.<br>Cari <span class="accent">personel.</span><br>Bikin karya.</h1>
+                <hr class="hero__rule" aria-hidden="true">
+                <div class="hero__lead taped p-3 bg-paper-2 mb-4 d-inline-block">
+                    Band cari pemain, musisi cari band. Post lowongan atau profil,
+                    connect langsung via WA. Gratis, direct, no middleman.
+                </div>
+                <div class="d-flex align-items-center gap-3 flex-wrap">
+                    <a href="/pages/gigboard.php" class="btn btn-warning btn-lg shadow-ink">
+                        <i class="fas fa-bullhorn me-2"></i>Lihat Lowongan
+                    </a>
+                    <a href="/pages/musicians.php" class="btn btn-outline-warning btn-lg shadow-ink">
+                        <i class="fas fa-users me-2"></i>Cari Musisi
+                    </a>
+                    <div class="roundel d-none d-md-flex ms-1" aria-hidden="true">
+                        <span class="roundel__main">Live</span>
+                        <span class="roundel__sub">Scene</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero__vinyl d-none d-lg-flex" aria-hidden="true">
+                <div class="vinyl">
+                    <div class="vinyl__label-wrap">
+                        <div class="vinyl__label-inner">
+                            <span class="vinyl__lbl-name">BK</span>
+                            <span class="vinyl__lbl-sub">BENKONEK</span>
+                        </div>
+                    </div>
+                    <div class="vinyl__spindle"></div>
+                </div>
+            </div>
         </div>
     </div>
 </section>

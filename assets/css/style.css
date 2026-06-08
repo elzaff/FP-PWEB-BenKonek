@@ -58,7 +58,7 @@ body {
     background-color: var(--paper);
     /* newsprint grain */
     background-image:
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.085'/%3E%3C/svg%3E");
     color: var(--ink);
     font-family: var(--font-body);
     font-size: 1rem;
@@ -229,15 +229,37 @@ h2.section-title { /* legacy hook from v1 markup */
     color: var(--paper);
     text-shadow: 4px 4px 0 var(--rust);
 }
-.hero__title .accent { color: var(--rust); text-shadow: 4px 4px 0 var(--paper); }
+.hero__title .accent {
+    -webkit-text-stroke: 2px var(--rust);
+    color: transparent;
+    text-shadow: none;
+}
 .hero__lead {
     font-family: var(--font-body);
     font-size: clamp(1rem, 1.8vw, 1.2rem);
-    color: var(--paper-3);
+    color: var(--ink-soft);
     max-width: 52ch;
     margin-bottom: 1.75rem;
 }
-.hero .btn-outline-warning { color: var(--paper); border-color: var(--paper); }
+/* Hero button overrides: hero bg is --ink, so default btn-warning (also --ink bg) is invisible */
+.hero .btn-warning {
+    background-color: var(--paper);
+    border-color: var(--paper);
+    color: var(--ink);
+}
+.hero .btn-warning:hover,
+.hero .btn-warning:focus {
+    background-color: var(--mustard);
+    border-color: var(--mustard);
+    color: var(--ink);
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--rust);
+}
+.hero .btn-outline-warning {
+    background-color: transparent;
+    color: var(--paper);
+    border-color: var(--paper);
+}
 .hero .btn-outline-warning:hover { background: var(--paper); color: var(--ink); box-shadow: var(--shadow-rust); }
 
 /* ---- Ticker: replaces v1 centered stat trio ---- */
@@ -629,4 +651,218 @@ footer { padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 0)) !important;
     pointer-events: none;
     user-select: none;
     line-height: 1.2;
+}
+
+/* ================================================================ VINTAGE+ ==
+   Concert-poster hero frame, vinyl record, roundel badge, registration marks,
+   teal accent system for musician surfaces.
+   ========================================================================= */
+
+/* ---- Hero: inner poster-frame border ---- */
+.hero::after {
+    content: "";
+    position: absolute;
+    inset: 10px;
+    border: 1px solid rgba(239, 231, 211, .12);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ---- Hero: two-column concert-poster layout ---- */
+.hero__layout {
+    display: flex;
+    align-items: center;
+    gap: clamp(2rem, 4vw, 3.5rem);
+    position: relative;
+    z-index: 1;
+}
+.hero__content { flex: 1; min-width: 0; }
+.hero__vinyl {
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ---- Hero: thin rule between title and lead ---- */
+.hero__rule {
+    border: none;
+    height: 1px;
+    background: rgba(239, 231, 211, .25);
+    margin: 1.1rem 0;
+    max-width: 44ch;
+    opacity: 1;
+}
+
+/* ---- Vinyl record ---- */
+.vinyl {
+    position: relative;
+    width: clamp(200px, 20vw, 265px);
+    height: clamp(200px, 20vw, 265px);
+    border-radius: 50%;
+    flex-shrink: 0;
+    animation: vinyl-spin 10s linear infinite;
+    background:
+        radial-gradient(circle closest-side at 50% 50%,
+            var(--mustard)              0%      31%,
+            var(--ink)                  31%     33%,
+            #100d0a                     33%     38%,
+            rgba(255,255,255,.065)      38%     38.7%,
+            #100d0a                     38.7%   46%,
+            rgba(255,255,255,.045)      46%     46.7%,
+            #1b1510                     46.7%   56%,
+            rgba(255,255,255,.06)       56%     56.7%,
+            #100d0a                     56.7%   66%,
+            rgba(255,255,255,.045)      66%     66.7%,
+            #1b1510                     66.7%   76%,
+            rgba(255,255,255,.055)      76%     76.7%,
+            #100d0a                     76.7%   86%,
+            rgba(255,255,255,.04)       86%     86.7%,
+            #1b1510                     86.7%   100%
+        );
+    box-shadow: 6px 6px 0 var(--rust);
+}
+.vinyl__label-wrap {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+.vinyl__label-inner {
+    width: 31%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--mustard);
+    border: 1.5px solid rgba(33, 28, 23, .4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1px;
+    padding: 5%;
+    text-align: center;
+    animation: vinyl-spin-reverse 10s linear infinite;
+}
+.vinyl__spindle {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 4%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--ink);
+    border: 1px solid rgba(255,255,255,.2);
+    z-index: 2;
+    pointer-events: none;
+}
+.vinyl__lbl-name {
+    font-family: var(--font-mono);
+    font-size: clamp(.38rem, .8vw, .52rem);
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink);
+    font-weight: 700;
+    line-height: 1.1;
+}
+.vinyl__lbl-sub {
+    font-family: var(--font-mono);
+    font-size: clamp(.28rem, .55vw, .36rem);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    line-height: 1;
+}
+@keyframes vinyl-spin {
+    to { transform: rotate(360deg); }
+}
+@keyframes vinyl-spin-reverse {
+    to { transform: rotate(-360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .vinyl { animation: none; }
+    .vinyl__label-inner { animation: none; }
+}
+
+/* ---- Roundel badge (circular gig-poster label) ---- */
+.roundel {
+    width: clamp(60px, 6.5vw, 80px);
+    height: clamp(60px, 6.5vw, 80px);
+    border-radius: 50%;
+    background: var(--rust);
+    border: 2.5px solid var(--paper);
+    box-shadow: 0 0 0 2px var(--rust), 3px 3px 0 var(--ink);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex-shrink: 0;
+    padding: .35rem;
+}
+.roundel--teal {
+    background: var(--teal);
+    box-shadow: 0 0 0 2px var(--teal), 3px 3px 0 var(--ink);
+}
+.roundel__main {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(.66rem, 1.2vw, .86rem);
+    line-height: 1;
+    color: var(--paper);
+    letter-spacing: -.02em;
+    text-transform: uppercase;
+}
+.roundel__sub {
+    font-family: var(--font-mono);
+    font-size: .36rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: rgba(239, 231, 211, .72);
+    line-height: 1;
+    margin-top: 2px;
+}
+
+/* ---- Registration-mark corners on vacancy cards ---- */
+.vacancy-card { position: relative; }
+.vacancy-card::before,
+.vacancy-card::after {
+    content: "";
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    pointer-events: none;
+    z-index: 1;
+}
+.vacancy-card::before {
+    top: 5px; left: 5px;
+    border-top: 1.5px solid var(--ink-faint);
+    border-left: 1.5px solid var(--ink-faint);
+}
+.vacancy-card::after {
+    bottom: 5px; right: 5px;
+    border-bottom: 1.5px solid var(--ink-faint);
+    border-right: 1.5px solid var(--ink-faint);
+}
+
+/* ---- Teal section-head variant (musicians) ---- */
+.section-head.section-teal { border-bottom-color: var(--teal); }
+.section-head.section-teal .section-title,
+.section-head.section-teal h2 { color: var(--teal-deep); }
+.section-head.section-teal .count { color: var(--teal); }
+
+/* ---- Teal instrument badge variant ---- */
+.badge-instrument--teal {
+    color: var(--teal-deep);
+    border-color: var(--teal);
+}
+
+/* ---- Musician card: teal hover accent ---- */
+.musician-card {
+    transition: transform .18s var(--ease-out), box-shadow .18s var(--ease-out), border-color .18s var(--ease-out);
+}
+.musician-card:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 7px 7px 0 var(--teal) !important;
+    border-color: var(--ink) !important;
 }

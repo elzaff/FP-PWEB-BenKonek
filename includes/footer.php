@@ -6,7 +6,7 @@
             <i class="fas fa-record-vinyl me-2"></i>Side B
         </p>
         <p class="mb-0 text-muted">
-            <strong>BenKonek</strong> &copy; <?= date('Y') ?> &ndash; papan pertemuan musisi &amp; band Indonesia
+            <strong>BenKonek</strong> &copy; <?= date('Y') ?> &ndash; tempat ketemu musisi &amp; band Indonesia
         </p>
     </div>
 </footer>
