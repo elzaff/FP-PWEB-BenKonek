@@ -154,6 +154,19 @@ require_once '../includes/header.php';
 
 <?php if ($user['role'] === 'musician'): ?>
 <!-- ── MUSICIAN ── -->
+<?php $profileIncomplete = empty($profile['primary_instrument']) || empty($profile['whatsapp_number']); ?>
+<?php if ($profileIncomplete): ?>
+<div class="card mb-4 p-4" style="border-color:var(--rust);box-shadow:4px 4px 0 var(--rust);">
+    <div class="d-flex align-items-start gap-3">
+        <span class="kicker flex-shrink-0">Penting</span>
+        <div>
+            <p class="fw-bold mb-1" style="font-family:var(--font-display);font-size:1.05rem;text-transform:uppercase;letter-spacing:-0.02em;">Profilmu belum lengkap</p>
+            <p class="meta mb-2">Isi instrumen utama + nomor WA supaya band bisa nemuin kamu di direktori Musisi dan langsung ngobrol.</p>
+            <a href="#musician-form" class="btn btn-sm btn-warning"><i class="fas fa-arrow-down me-1"></i>Lengkapi Sekarang</a>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
 <div class="row g-4">
     <div class="col-md-3">
         <div class="card p-3 text-center">
@@ -171,7 +184,7 @@ require_once '../includes/header.php';
         </div>
     </div>
     <div class="col-md-9">
-        <div class="card p-4">
+        <div class="card p-4" id="musician-form">
             <h3 class="h5 mb-3"><i class="fas fa-edit me-2"></i>Edit Profil Musisi</h3>
             <form method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="action" value="save_musician">
@@ -196,10 +209,12 @@ require_once '../includes/header.php';
                     <div class="col-md-6">
                         <label class="form-label">Level Pengalaman</label>
                         <select name="experience_level" class="form-select">
-                            <?php foreach (['Beginner','Intermediate','Advanced','Professional'] as $lvl): ?>
+                            <?php
+                            $levelLabels = ['Beginner'=>'Pemula','Intermediate'=>'Menengah','Advanced'=>'Mahir','Professional'=>'Profesional'];
+                            foreach ($levelLabels as $lvl => $lvlLabel): ?>
                             <option value="<?= $lvl ?>"
                                 <?= ($profile['experience_level'] ?? 'Beginner') === $lvl ? 'selected' : '' ?>>
-                                <?= $lvl ?>
+                                <?= $lvlLabel ?>
                             </option>
                             <?php endforeach; ?>
                         </select>
@@ -220,6 +235,7 @@ require_once '../includes/header.php';
                         <input type="url" name="portfolio_url" class="form-control"
                                value="<?= htmlspecialchars($profile['portfolio_url'] ?? '') ?>"
                                placeholder="https://soundcloud.com/...">
+                        <div class="form-text" style="font-size:.72rem;color:var(--ink-faint);">SoundCloud, YouTube, Instagram, atau link lainnya.</div>
                     </div>
                     <div class="col-12">
                         <label class="form-label">Foto Profil (JPG/PNG/WebP, maks 2MB)</label>
@@ -238,6 +254,30 @@ require_once '../includes/header.php';
 
 <?php elseif ($user['role'] === 'band'): ?>
 <!-- ── BAND ── -->
+<?php $bandProfileIncomplete = empty($profile['whatsapp_number']) || empty($profile['main_genre']) || empty($profile['basecamp_location']); ?>
+<?php if ($bandProfileIncomplete): ?>
+<div class="card mb-4 p-4" style="border-color:var(--rust);box-shadow:4px 4px 0 var(--rust);">
+    <div class="d-flex align-items-start gap-3">
+        <span class="kicker flex-shrink-0">Langkah 1</span>
+        <div>
+            <p class="fw-bold mb-1" style="font-family:var(--font-display);font-size:1.05rem;text-transform:uppercase;letter-spacing:-0.02em;">Lengkapi profil band dulu</p>
+            <p class="meta mb-2">Isi genre, kota basecamp, dan nomor WA — baru bisa buat lowongan yang kelihatan di papan.</p>
+            <a href="#band-form" class="btn btn-sm btn-warning"><i class="fas fa-arrow-down me-1"></i>Isi Profil</a>
+        </div>
+    </div>
+</div>
+<?php elseif (empty($vacancies)): ?>
+<div class="card mb-4 p-4" style="border-color:var(--teal);box-shadow:4px 4px 0 var(--teal);">
+    <div class="d-flex align-items-start gap-3">
+        <span class="kicker flex-shrink-0" style="border-color:var(--teal);color:var(--teal);">Langkah 2</span>
+        <div>
+            <p class="fw-bold mb-1" style="font-family:var(--font-display);font-size:1.05rem;text-transform:uppercase;letter-spacing:-0.02em;">Buat lowongan pertama</p>
+            <p class="meta mb-2">Pasang di papan sekarang. Musisi yang cocok langsung bisa hubungi via WA.</p>
+            <a href="/pages/vacancy_form.php" class="btn btn-sm btn-warning"><i class="fas fa-plus me-1"></i>Buat Lowongan</a>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
 <div class="row g-4">
     <div class="col-md-3">
         <div class="card p-3 text-center">
@@ -260,7 +300,7 @@ require_once '../includes/header.php';
         </div>
     </div>
     <div class="col-md-9">
-        <div class="card p-4 mb-4">
+        <div class="card p-4 mb-4" id="band-form">
             <h3 class="h5 mb-3"><i class="fas fa-edit me-2"></i>Edit Profil Band</h3>
             <form method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="action" value="save_band">
@@ -318,12 +358,16 @@ require_once '../includes/header.php';
                 <?php endif; ?>
             </div>
             <?php if (empty($vacancies)): ?>
-            <p class="text-center py-3 text-muted">
-                Belum ada lowongan.
+            <div class="empty-state text-center p-4">
+                <i class="fas fa-bullhorn fa-2x mb-3"></i>
+                <p class="fw-bold mb-1" style="font-family:var(--font-display);text-transform:uppercase;letter-spacing:-0.02em;">Belum Ada Lowongan</p>
+                <p class="meta mb-3">Band aktif di papan dapat musisi lebih cepat.<br>Satu lowongan sudah cukup untuk mulai.</p>
                 <?php if (!empty($profile['id'])): ?>
-                <a href="/pages/vacancy_form.php">Buat sekarang!</a>
+                <a href="/pages/vacancy_form.php" class="btn btn-warning btn-sm">
+                    <i class="fas fa-plus me-2"></i>Buat Lowongan Pertama
+                </a>
                 <?php endif; ?>
-            </p>
+            </div>
             <?php else: ?>
             <div class="table-responsive">
                 <table class="table table-dark table-hover mb-0 align-middle">
@@ -344,10 +388,15 @@ require_once '../includes/header.php';
                             <td class="d-flex gap-1">
                                 <a href="/pages/vacancy_form.php?id=<?= $v['id'] ?>"
                                    class="btn btn-sm btn-outline-warning">Edit</a>
-                                <button class="btn btn-sm btn-outline-danger"
-                                        onclick="konfirmasiHapus('/pages/vacancy_form.php?delete=<?= $v['id'] ?>')">
-                                    Hapus
-                                </button>
+                                <form method="POST" action="/pages/vacancy_form.php" class="d-inline" id="del-vac-<?= $v['id'] ?>">
+                                    <input type="hidden" name="_csrf" value="<?= csrfToken() ?>">
+                                    <input type="hidden" name="action" value="delete_vacancy">
+                                    <input type="hidden" name="vacancy_id" value="<?= $v['id'] ?>">
+                                    <button type="button" class="btn btn-sm btn-outline-danger"
+                                            onclick="konfirmasiHapusForm('del-vac-<?= $v['id'] ?>','Lowongan ini akan dihapus permanen!')">
+                                        Hapus
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                         <?php endforeach; ?>

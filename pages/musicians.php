@@ -85,7 +85,7 @@ if ($params) {
         <div class="row g-4">
             <?php foreach ($musicians as $idx => $m): ?>
             <div class="col-md-6 col-xl-4">
-                <article class="card h-100" data-reveal="<?= ($idx % 6) * 50 ?>">
+                <article class="card h-100 taped" data-reveal="<?= ($idx % 6) * 50 ?>" style="transform: rotate(<?= ($idx % 2 == 0 ? '-1.5' : '1.5') ?>deg);">
                     <?php if (!empty($m['photo_profile'])): ?>
                     <img src="/assets/images/uploads/<?= htmlspecialchars($m['photo_profile']) ?>"
                          class="musician-card-img" alt="<?= htmlspecialchars($m['full_name']) ?>">
@@ -97,7 +97,10 @@ if ($params) {
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start">
                             <h3 class="h5 card-title mb-2"><?= htmlspecialchars($m['full_name']) ?></h3>
-                            <span class="catalog-no">NO. <?= str_pad((string)$m['id'], 3, '0', STR_PAD_LEFT) ?></span>
+                            <span class="catalog-no stamp border-0 p-0" style="font-size: 0.65rem; transform: rotate(10deg); opacity: 0.7;">
+                                NO. <?= str_pad((string)$m['id'], 3, '0', STR_PAD_LEFT) ?>
+                            </span>
+                        </div>
                         </div>
                         <?php if ($m['primary_instrument']): ?>
                         <span class="badge-instrument mb-2">

@@ -23,7 +23,7 @@ function hubungiWhatsApp(nomor, namaTarget, judul) {
     window.open('https://wa.me/' + cleaned + '?text=' + pesan, '_blank');
 }
 
-/* Confirm-then-delete dialog. */
+/* Confirm-then-delete dialog (GET redirect, kept for backward compat). */
 function konfirmasiHapus(url, pesan) {
     pesan = pesan || 'Data ini akan dihapus permanen!';
     Swal.fire({
@@ -43,6 +43,29 @@ function konfirmasiHapus(url, pesan) {
     });
 }
 
+/* Confirm-then-submit a POST form (CSRF-safe delete). */
+function konfirmasiHapusForm(formId, pesan) {
+    pesan = pesan || 'Data ini akan dihapus permanen!';
+    Swal.fire({
+        title: 'Yakin ingin menghapus?',
+        text: pesan,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: BK.rust,
+        cancelButtonColor: BK.muted,
+        confirmButtonText: 'Ya, Hapus!',
+        cancelButtonText: 'Batal',
+        background: BK.paper,
+        color: BK.ink,
+        iconColor: BK.rust
+    }).then(function (result) {
+        if (result.isConfirmed) {
+            var form = document.getElementById(formId);
+            if (form) form.submit();
+        }
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -54,6 +77,19 @@ document.addEventListener('DOMContentLoaded', function () {
             track.innerHTML = track.innerHTML + track.innerHTML;
         });
     }
+
+    /* Prevent double-submit on all POST forms. */
+    document.querySelectorAll('form[method="POST"]').forEach(function (form) {
+        form.addEventListener('submit', function () {
+            if (form.dataset.submitted) return;
+            form.dataset.submitted = '1';
+            var btn = form.querySelector('button[type="submit"]');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Memproses...';
+            }
+        });
+    });
 
     /* Reveal-on-scroll: content is visible by default (CSS), this only enhances. */
     var reveal = document.querySelectorAll('[data-reveal]');

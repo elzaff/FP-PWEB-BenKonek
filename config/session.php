@@ -34,3 +34,20 @@ function getCurrentUser(): ?array {
         'name' => $_SESSION['name'] ?? '',
     ];
 }
+
+function csrfToken(): string {
+    if (empty($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+    return $_SESSION['csrf_token'];
+}
+
+function verifyCsrf(): void {
+    $token = $_POST['_csrf'] ?? '';
+    if (!hash_equals($_SESSION['csrf_token'] ?? '', $token)) {
+        $_SESSION['flash_message'] = 'Token keamanan tidak valid. Coba lagi.';
+        $_SESSION['flash_type']    = 'error';
+        header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? '/index.php'));
+        exit;
+    }
+}

@@ -23,19 +23,22 @@ $totalVacancies = $db->query("SELECT COUNT(*) FROM vacancies WHERE status='Open'
 ?>
 
 <!-- ── HERO: gig poster (full-bleed) ── -->
-<section class="hero">
-    <div class="container">
+<section class="hero overflow-hidden">
+    <div class="container position-relative">
+        <div class="scribble position-absolute d-none d-lg-block" aria-hidden="true" style="top: -20px; right: 20px; transform: rotate(5deg);">
+            *Scene built, by hand!
+        </div>
         <p class="hero__eyebrow">Est. <?= date('Y') ?> · Papan Pertemuan Musisi Indonesia</p>
         <h1 class="hero__title">Cari band.<br>Cari <span class="accent">personel.</span><br>Bikin karya.</h1>
-        <p class="hero__lead">
+        <div class="hero__lead taped p-3 bg-paper-2 mb-4 d-inline-block">
             Band pasang lowongan, musisi pasang lapak. Ketemu di sini, lanjut ngobrol
             di WhatsApp. Tanpa basa-basi, tanpa algoritma.
-        </p>
+        </div>
         <div class="d-flex gap-3 flex-wrap">
-            <a href="/pages/gigboard.php" class="btn btn-warning btn-lg">
+            <a href="/pages/gigboard.php" class="btn btn-warning btn-lg shadow-ink">
                 <i class="fas fa-bullhorn me-2"></i>Lihat Lowongan
             </a>
-            <a href="/pages/musicians.php" class="btn btn-outline-warning btn-lg">
+            <a href="/pages/musicians.php" class="btn btn-outline-warning btn-lg shadow-ink">
                 <i class="fas fa-users me-2"></i>Cari Musisi
             </a>
         </div>
@@ -68,11 +71,13 @@ $totalVacancies = $db->query("SELECT COUNT(*) FROM vacancies WHERE status='Open'
 <div class="row g-4 mb-4">
     <?php foreach ($vacancies as $i => $v): ?>
     <div class="col-md-6 col-lg-4">
-        <article class="card h-100 vacancy-card" data-reveal="<?= $i * 60 ?>">
+        <article class="card h-100 vacancy-card" data-reveal="<?= $i * 60 ?>" style="--card-tilt: <?= ($i % 2 == 0 ? '-1.5' : '1.5') ?>deg;">
             <div class="card-body d-flex flex-column">
                 <div class="d-flex justify-content-between align-items-start mb-2">
                     <span class="badge bg-warning"><?= htmlspecialchars($v['project_type']) ?></span>
-                    <span class="catalog-no">NO. <?= str_pad((string)$v['id'], 3, '0', STR_PAD_LEFT) ?></span>
+                    <span class="catalog-no stamp border-0 p-0" style="font-size: 0.65rem; transform: rotate(10deg); opacity: 0.7;">
+                        NO. <?= str_pad((string)$v['id'], 3, '0', STR_PAD_LEFT) ?>
+                    </span>
                 </div>
                 <h3 class="h5 card-title mb-2"><?= htmlspecialchars($v['title']) ?></h3>
                 <p class="meta mb-1"><i class="fas fa-drum me-2"></i><?= htmlspecialchars($v['band_name']) ?></p>

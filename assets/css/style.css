@@ -27,15 +27,17 @@
     --font-display: "Bricolage Grotesque", "Spline Sans", system-ui, sans-serif;
     --font-body:    "Spline Sans", system-ui, -apple-system, sans-serif;
     --font-mono:    "Spline Sans Mono", ui-monospace, "Courier New", monospace;
+    --font-hand:    "Gochi Hand", cursive;
 
     /* ---- Radius (rectangular by default) ---- */
-    --r-sm: 2px;
-    --r-md: 3px;
+    --r-sm: 1px;
+    --r-md: 1px;
 
-    /* ---- Hard offset shadow ---- */
-    --shadow-ink:  4px 4px 0 var(--ink);
-    --shadow-rust: 4px 4px 0 var(--rust);
-    --shadow-teal: 4px 4px 0 var(--teal);
+    /* ---- Hard offset shadow (more aggressive for zine look) ---- */
+    --shadow-ink:   6px 6px 0 var(--ink);
+    --shadow-rust:  6px 6px 0 var(--rust);
+    --shadow-teal:  6px 6px 0 var(--teal);
+    --shadow-sm:    3px 3px 0 var(--ink);
 
     /* ---- Motion ---- */
     --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
@@ -139,6 +141,10 @@ h2.section-title { /* legacy hook from v1 markup */
     border-radius: var(--r-sm);
 }
 
+.border-top { border-top: 2px solid var(--line) !important; }
+.border-bottom { border-bottom: 2px solid var(--line) !important; }
+.border-dashed { border-style: dashed !important; border-width: 1.5px !important; }
+
 /* ---------------------------------------------------------------- Nav ---- */
 
 .navbar {
@@ -167,6 +173,7 @@ h2.section-title { /* legacy hook from v1 markup */
     transition: background-color .15s var(--ease-out), color .15s var(--ease-out);
 }
 .navbar .nav-link:hover { background: var(--ink); color: var(--paper) !important; }
+.navbar .nav-link.active { color: var(--rust) !important; border-bottom: 2px solid var(--rust); }
 .navbar .nav-link .text-warning { color: var(--rust) !important; }
 .navbar-toggler {
     border: 2px solid var(--ink) !important;
@@ -552,10 +559,10 @@ footer i { color: var(--rust) !important; }
 
 [data-reveal] {
     opacity: 0;
-    transform: translateY(14px);
+    transform: translateY(14px) rotate(var(--card-tilt, 0deg));
     transition: opacity .5s var(--ease-out), transform .5s var(--ease-out);
 }
-[data-reveal].is-in { opacity: 1; transform: none; }
+[data-reveal].is-in { opacity: 1; transform: translateY(0) rotate(var(--card-tilt, 0deg)); }
 
 /* ------------------------------------------------------- Reduced motion -- */
 
@@ -567,14 +574,59 @@ footer i { color: var(--rust) !important; }
         transition-duration: .001ms !important;
     }
     .ticker__track { animation: none; transform: none; padding-left: 1rem; white-space: normal; }
-    [data-reveal] { opacity: 1; transform: none; }
+    [data-reveal] { opacity: 1; transform: rotate(var(--card-tilt, 0deg)); }
     .vacancy-card:hover, .btn:hover { transform: none; }
 }
 
 /* ----------------------------------------------------------- Responsive -- */
 
+/* Safe-area padding for notched phones */
+footer { padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 0)) !important; }
+
 @media (max-width: 575.98px) {
     .hero__title { text-shadow: 3px 3px 0 var(--rust); }
     .navbar-brand { font-size: 1.25rem; }
     .card { box-shadow: 3px 3px 0 var(--ink); }
+}
+
+/* Prevent card flex content from overflowing on 320px screens */
+.vacancy-card .card-body > .d-flex > .flex-grow-1 {
+    min-width: 0;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+.vacancy-card .card-body a.fw-semibold {
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+/* ---------------------------------------------------------- Utilities ---- */
+
+.bg-paper-2 { background-color: var(--paper-2) !important; }
+.bg-paper-3 { background-color: var(--paper-3) !important; }
+.shadow-ink  { box-shadow: var(--shadow-ink)  !important; }
+.shadow-rust { box-shadow: var(--shadow-rust) !important; }
+
+/* Tape strip — a translucent strip across the top edge of taped elements */
+.taped { position: relative; }
+.taped::before {
+    content: "";
+    position: absolute; top: -9px; left: 50%;
+    transform: translateX(-50%) rotate(-1.5deg);
+    width: 52px; height: 18px;
+    background: rgba(225, 215, 185, 0.72);
+    border-left:  1px solid rgba(175, 160, 120, 0.45);
+    border-right: 1px solid rgba(175, 160, 120, 0.45);
+    pointer-events: none; z-index: 2;
+}
+
+/* Handwritten scribble annotation (Gochi Hand) */
+.scribble {
+    font-family: var(--font-hand);
+    font-size: .88rem;
+    color: var(--paper-3);
+    opacity: .6;
+    pointer-events: none;
+    user-select: none;
+    line-height: 1.2;
 }

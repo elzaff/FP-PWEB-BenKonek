@@ -6,6 +6,7 @@ config/database.php
 # Claude Code local settings (contains personal data)
 .claude/settings.local.json
 .claude
+.gemini
 design
 
 # OS
@@ -20,7 +21,7 @@ desktop.ini
 *.user
 
 # PHP
-*.log
+*.log?
 error_log
 /vendor/
 

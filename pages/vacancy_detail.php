@@ -27,22 +27,24 @@ $isOwner = isLoggedIn()
     && $_SESSION['role'] === 'band'
     && (int)$_SESSION['user_id'] === (int)$vacancy['band_user_id'];
 
-if ($isOwner) {
-    if (isset($_GET['close'])) {
+if ($isOwner && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    verifyCsrf();
+    $action = $_POST['action'] ?? '';
+    if ($action === 'close') {
         $s = $db->prepare("UPDATE vacancies SET status='Closed' WHERE id=?");
         $s->bind_param("i", $id); $s->execute();
         $_SESSION['flash_message'] = 'Lowongan ditutup.';
         $_SESSION['flash_type']    = 'success';
         header('Location: /pages/vacancy_detail.php?id=' . $id); exit;
     }
-    if (isset($_GET['reopen'])) {
+    if ($action === 'reopen') {
         $s = $db->prepare("UPDATE vacancies SET status='Open' WHERE id=?");
         $s->bind_param("i", $id); $s->execute();
         $_SESSION['flash_message'] = 'Lowongan dibuka kembali.';
         $_SESSION['flash_type']    = 'success';
         header('Location: /pages/vacancy_detail.php?id=' . $id); exit;
     }
-    if (isset($_GET['delete'])) {
+    if ($action === 'delete') {
         $s = $db->prepare("DELETE FROM vacancies WHERE id=? AND band_id=?");
         $s->bind_param("ii", $id, $vacancy['band_id']); $s->execute();
         $_SESSION['flash_message'] = 'Lowongan dihapus.';
@@ -104,18 +106,30 @@ require_once '../includes/header.php';
                     <i class="fas fa-edit me-1"></i>Edit
                 </a>
                 <?php if ($vacancy['status'] === 'Open'): ?>
-                <a href="?id=<?= $id ?>&close=1" class="btn btn-outline-secondary btn-sm">
-                    <i class="fas fa-lock me-1"></i>Tutup
-                </a>
+                <form method="POST" class="d-inline">
+                    <input type="hidden" name="_csrf" value="<?= csrfToken() ?>">
+                    <input type="hidden" name="action" value="close">
+                    <button type="submit" class="btn btn-outline-secondary btn-sm">
+                        <i class="fas fa-lock me-1"></i>Tutup
+                    </button>
+                </form>
                 <?php else: ?>
-                <a href="?id=<?= $id ?>&reopen=1" class="btn btn-outline-success btn-sm">
-                    <i class="fas fa-lock-open me-1"></i>Buka Kembali
-                </a>
+                <form method="POST" class="d-inline">
+                    <input type="hidden" name="_csrf" value="<?= csrfToken() ?>">
+                    <input type="hidden" name="action" value="reopen">
+                    <button type="submit" class="btn btn-outline-success btn-sm">
+                        <i class="fas fa-lock-open me-1"></i>Buka Kembali
+                    </button>
+                </form>
                 <?php endif; ?>
-                <button class="btn btn-outline-danger btn-sm"
-                        onclick="konfirmasiHapus('/pages/vacancy_detail.php?id=<?= $id ?>&delete=1','Lowongan ini akan dihapus permanen!')">
-                    <i class="fas fa-trash me-1"></i>Hapus
-                </button>
+                <form method="POST" class="d-inline" id="form-delete-<?= $id ?>">
+                    <input type="hidden" name="_csrf" value="<?= csrfToken() ?>">
+                    <input type="hidden" name="action" value="delete">
+                    <button type="button" class="btn btn-outline-danger btn-sm"
+                            onclick="konfirmasiHapusForm('form-delete-<?= $id ?>','Lowongan ini akan dihapus permanen!')">
+                        <i class="fas fa-trash me-1"></i>Hapus
+                    </button>
+                </form>
             </div>
             <?php endif; ?>
         </div>

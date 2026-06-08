@@ -25,12 +25,16 @@ $vacancy = null;
 $isEdit  = false;
 $errors  = [];
 
-// Handle delete via GET
-if ($editId && isset($_GET['delete'])) {
-    $s = $db->prepare("DELETE FROM vacancies WHERE id=? AND band_id=?");
-    $s->bind_param("ii", $editId, $bandId); $s->execute();
-    $_SESSION['flash_message'] = 'Lowongan berhasil dihapus.';
-    $_SESSION['flash_type']    = 'success';
+// Handle delete via POST+CSRF
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'delete_vacancy') {
+    verifyCsrf();
+    $delId = (int)($_POST['vacancy_id'] ?? 0);
+    if ($delId) {
+        $s = $db->prepare("DELETE FROM vacancies WHERE id=? AND band_id=?");
+        $s->bind_param("ii", $delId, $bandId); $s->execute();
+        $_SESSION['flash_message'] = 'Lowongan berhasil dihapus.';
+        $_SESSION['flash_type']    = 'success';
+    }
     header('Location: /pages/dashboard.php'); exit;
 }
 

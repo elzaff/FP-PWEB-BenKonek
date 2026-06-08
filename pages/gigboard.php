@@ -62,33 +62,47 @@ $pageUrl = function(int $p) use ($filterInstrument, $filterCity): string {
 <div class="row">
     <!-- Filter sidebar -->
     <div class="col-lg-3 mb-4">
-        <div class="filter-sidebar">
-            <h5 class="mb-3"><i class="fas fa-filter me-2"></i>Filter</h5>
-            <form method="GET">
-                <div class="mb-3">
-                    <label class="form-label">Instrumen</label>
-                    <select name="instrument" class="form-select form-select-sm" onchange="this.form.submit()">
-                        <option value="">Semua Instrumen</option>
-                        <?php foreach ($instruments as $ins): ?>
-                        <option value="<?= htmlspecialchars($ins['needed_instrument']) ?>"
-                            <?= $filterInstrument === $ins['needed_instrument'] ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($ins['needed_instrument']) ?>
-                        </option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Kota Band</label>
-                    <input type="text" name="city" class="form-control form-control-sm"
-                           value="<?= htmlspecialchars($filterCity) ?>" placeholder="Surabaya...">
-                </div>
-                <button type="submit" class="btn btn-warning btn-sm w-100">Terapkan</button>
-                <?php if ($filterInstrument || $filterCity): ?>
-                <a href="/pages/gigboard.php" class="btn btn-outline-secondary btn-sm w-100 mt-2">
-                    <i class="fas fa-times me-1"></i>Reset Filter
-                </a>
-                <?php endif; ?>
-            </form>
+        <!-- Mobile toggle — hidden on lg+ -->
+        <button class="btn btn-outline-secondary btn-sm w-100 d-lg-none mb-2" type="button"
+                data-bs-toggle="collapse" data-bs-target="#filterPanel"
+                aria-expanded="<?= ($filterInstrument || $filterCity) ? 'true' : 'false' ?>"
+                aria-controls="filterPanel">
+            <i class="fas fa-filter me-2"></i>Filter
+            <?php if ($filterInstrument || $filterCity): ?>
+            <span class="badge bg-warning ms-1">Aktif</span>
+            <?php endif; ?>
+        </button>
+        <div id="filterPanel" class="collapse d-lg-block<?= ($filterInstrument || $filterCity) ? ' show' : '' ?>">
+            <div class="filter-sidebar">
+                <h5 class="mb-3 d-none d-lg-flex align-items-center">
+                    <i class="fas fa-filter me-2"></i>Filter
+                </h5>
+                <form method="GET">
+                    <div class="mb-3">
+                        <label class="form-label">Instrumen</label>
+                        <select name="instrument" class="form-select form-select-sm" onchange="this.form.submit()">
+                            <option value="">Semua Instrumen</option>
+                            <?php foreach ($instruments as $ins): ?>
+                            <option value="<?= htmlspecialchars($ins['needed_instrument']) ?>"
+                                <?= $filterInstrument === $ins['needed_instrument'] ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($ins['needed_instrument']) ?>
+                            </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Kota Band</label>
+                        <input type="text" name="city" class="form-control form-control-sm"
+                               value="<?= htmlspecialchars($filterCity) ?>" placeholder="Surabaya...">
+                    </div>
+                    <button type="submit" class="btn btn-warning btn-sm w-100">Terapkan</button>
+                    <?php if ($filterInstrument || $filterCity): ?>
+                    <a href="/pages/gigboard.php" class="btn btn-outline-secondary btn-sm w-100 mt-2">
+                        <i class="fas fa-times me-1"></i>Reset Filter
+                    </a>
+                    <?php endif; ?>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -118,15 +132,18 @@ $pageUrl = function(int $p) use ($filterInstrument, $filterCity): string {
 
         <div id="vacancyList">
             <?php foreach ($vacancies as $v): ?>
-            <article class="card mb-3 vacancy-card"
+            <article class="card mb-4 vacancy-card"
                  data-title="<?= htmlspecialchars(mb_strtolower($v['title'])) ?>"
-                 data-desc="<?= htmlspecialchars(mb_strtolower($v['description'] ?? '')) ?>">
+                 data-desc="<?= htmlspecialchars(mb_strtolower($v['description'] ?? '')) ?>"
+                 style="transform: rotate(<?= ($v['id'] % 2 === 0 ? '0.5' : '-0.5') ?>deg);">
                 <div class="card-body">
                     <div class="d-flex align-items-start">
                         <div class="flex-grow-1">
                             <div class="d-flex align-items-center flex-wrap gap-2 mb-2">
                                 <span class="badge bg-warning"><?= htmlspecialchars($v['project_type']) ?></span>
-                                <span class="catalog-no">NO. <?= str_pad((string)$v['id'], 3, '0', STR_PAD_LEFT) ?></span>
+                                <span class="catalog-no stamp border-0 p-0" style="font-size: 0.65rem; transform: rotate(10deg); opacity: 0.7;">
+                                    NO. <?= str_pad((string)$v['id'], 3, '0', STR_PAD_LEFT) ?>
+                                </span>
                             </div>
                             <a href="/pages/vacancy_detail.php?id=<?= $v['id'] ?>"
                                class="fw-semibold fs-5 d-block mb-2" style="color:var(--ink);font-family:var(--font-display);">

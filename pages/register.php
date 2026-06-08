@@ -61,10 +61,13 @@ require_once '../includes/header.php';
 ?>
 
 <div class="row justify-content-center">
-    <div class="col-md-7 col-lg-6">
-        <div class="card p-4 p-md-5">
-            <p class="kicker mb-3"><i class="fas fa-pen-nib me-1"></i> Daftar Lapak Baru</p>
-            <h1 class="h2 mb-1" style="text-transform:uppercase;letter-spacing:-0.03em;">Gabung Scene</h1>
+    <div class="col-md-8 col-lg-7">
+        <div class="card taped p-4 p-md-5 position-relative" style="transform: rotate(1deg);">
+            <div class="scribble position-absolute d-none d-md-block" aria-hidden="true" style="bottom: 40px; right: -40px; transform: rotate(-8deg); width: 140px;">
+                Gabung skena, cari kawan! →
+            </div>
+            <p class="kicker mb-3"><i class="fas fa-user-plus me-1"></i> Side B · Daftar</p>
+            <h1 class="h2 mb-1" style="text-transform:uppercase;letter-spacing:-0.03em;">Daftar Akun</h1>
             <p class="text-muted mb-4">Satu menit. Lalu kamu kelihatan di papan.</p>
 
             <?php if (!empty($errors)): ?>
@@ -82,7 +85,7 @@ require_once '../includes/header.php';
                     <label class="form-label">Nama Lengkap / Nama Band</label>
                     <input type="text" name="name" class="form-control"
                            value="<?= htmlspecialchars($formData['name']) ?>" required
-                           placeholder="Nama kamu atau nama band">
+                           maxlength="100" placeholder="Nama kamu atau nama band">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Email</label>
@@ -110,6 +113,7 @@ require_once '../includes/header.php';
                                    id="roleMus" <?= $formData['role'] === 'musician' ? 'checked' : '' ?>>
                             <label class="form-check-label" for="roleMus">
                                 <i class="fas fa-guitar me-1 text-warning"></i>Musisi
+                                <small class="d-block text-muted" style="font-size:.72rem;">Cari band atau gig</small>
                             </label>
                         </div>
                         <div class="form-check">
@@ -117,6 +121,7 @@ require_once '../includes/header.php';
                                    id="roleBand" <?= $formData['role'] === 'band' ? 'checked' : '' ?>>
                             <label class="form-check-label" for="roleBand">
                                 <i class="fas fa-users me-1 text-warning"></i>Band
+                                <small class="d-block text-muted" style="font-size:.72rem;">Cari personel baru</small>
                             </label>
                         </div>
                     </div>
