@@ -26,12 +26,11 @@ $totalVacancies = $db->query("SELECT COUNT(*) FROM vacancies WHERE status='Open'
     <div class="container position-relative">
         <div class="hero__layout">
             <div class="hero__content">
-                <p class="hero__eyebrow">Est. <?= date('Y') ?> · Indonesian Music Scene</p>
-                <h1 class="hero__title">Cari band.<br>Cari <span class="accent">personel.</span><br>Bikin karya.</h1>
+                <p class="hero__eyebrow">Est. <?= date('Y') ?> · Hidupkan Skena Musik Indonesia</p>
+                <h1 class="hero__title">Cari Musisi.<br>Cari <span class="accent">Pesona.</span><br>Bikin karya.</h1>
                 <hr class="hero__rule" aria-hidden="true">
                 <div class="hero__lead taped p-3 bg-paper-2 mb-4 d-inline-block">
-                    Band cari pemain, musisi cari band. Post lowongan atau profil,
-                    connect langsung via WA. Gratis, direct, no middleman.
+                    Jago main musik tapi bingung mau jamming siapa? Di sini tempatnya! Ayo berkarya.
                 </div>
                 <div class="d-flex align-items-center gap-3 flex-wrap">
                     <a href="/pages/gigboard.php" class="btn btn-warning btn-lg shadow-ink">
