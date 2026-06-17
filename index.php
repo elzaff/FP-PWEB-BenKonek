@@ -8,7 +8,7 @@ $db = getDB();
 
 $vacancies = [];
 $result = $db->query("
-    SELECT v.*, b.band_name, b.basecamp_location, b.whatsapp_number, b.main_genre
+    SELECT v.*, b.band_name, b.basecamp_location, b.main_genre
     FROM vacancies v
     JOIN bands b ON v.band_id = b.id
     WHERE v.status = 'Open'
@@ -17,9 +17,9 @@ $result = $db->query("
 ");
 if ($result) $vacancies = $result->fetch_all(MYSQLI_ASSOC);
 
-$totalMusicians = $db->query("SELECT COUNT(*) FROM musicians")->fetch_row()[0] ?? 0;
 $totalBands     = $db->query("SELECT COUNT(*) FROM bands")->fetch_row()[0] ?? 0;
 $totalVacancies = $db->query("SELECT COUNT(*) FROM vacancies WHERE status='Open'")->fetch_row()[0] ?? 0;
+$totalApplications = $db->query("SELECT COUNT(*) FROM connections")->fetch_row()[0] ?? 0;
 ?>
 
 <section class="hero overflow-hidden">
@@ -27,7 +27,7 @@ $totalVacancies = $db->query("SELECT COUNT(*) FROM vacancies WHERE status='Open'
         <div class="hero__layout">
             <div class="hero__content">
                 <p class="hero__eyebrow">Est. <?= date('Y') ?> · Hidupkan Skena Musik Indonesia</p>
-                <h1 class="hero__title">Cari Musisi.<br>Cari <span class="accent">Pesona.</span><br>Bikin karya.</h1>
+                <h1 class="hero__title">Cari Lowongan.<br>Kirim <span class="accent">Profil.</span><br>Bikin karya.</h1>
                 <hr class="hero__rule" aria-hidden="true">
                 <div class="hero__lead taped p-3 bg-paper-2 mb-4 d-inline-block">
                     Jago main musik tapi bingung mau jamming siapa? Di sini tempatnya! Ayo berkarya.
@@ -36,8 +36,8 @@ $totalVacancies = $db->query("SELECT COUNT(*) FROM vacancies WHERE status='Open'
                     <a href="/pages/gigboard.php" class="btn btn-warning btn-lg shadow-ink">
                         <i class="fas fa-bullhorn me-2"></i>Lihat Lowongan
                     </a>
-                    <a href="/pages/musicians.php" class="btn btn-outline-warning btn-lg shadow-ink">
-                        <i class="fas fa-users me-2"></i>Cari Musisi
+                    <a href="/pages/register.php" class="btn btn-outline-warning btn-lg shadow-ink">
+                        <i class="fas fa-user-plus me-2"></i>Buat Profil
                     </a>
                     <div class="roundel d-none d-md-flex ms-1" aria-hidden="true">
                         <span class="roundel__main">Live</span>
@@ -46,15 +46,7 @@ $totalVacancies = $db->query("SELECT COUNT(*) FROM vacancies WHERE status='Open'
                 </div>
             </div>
             <div class="hero__vinyl d-none d-lg-flex" aria-hidden="true">
-                <div class="vinyl">
-                    <div class="vinyl__label-wrap">
-                        <div class="vinyl__label-inner">
-                            <span class="vinyl__lbl-name">BK</span>
-                            <span class="vinyl__lbl-sub">BENKONEK</span>
-                        </div>
-                    </div>
-                    <div class="vinyl__spindle"></div>
-                </div>
+                <img src="/assets/images/vinyl.webp" alt="" class="hero__vinyl-img">
             </div>
         </div>
     </div>
@@ -62,9 +54,9 @@ $totalVacancies = $db->query("SELECT COUNT(*) FROM vacancies WHERE status='Open'
 
 <div class="ticker" aria-label="Statistik BenKonek">
     <div class="ticker__track">
-        <span><b><?= (int)$totalMusicians ?></b> Musisi Terdaftar</span><span><i>/</i></span>
         <span><b><?= (int)$totalBands ?></b> Band Aktif</span><span><i>/</i></span>
         <span><b><?= (int)$totalVacancies ?></b> Lowongan Terbuka</span><span><i>/</i></span>
+        <span><b><?= (int)$totalApplications ?></b> Pendaftaran Terkirim</span><span><i>/</i></span>
         <span>Calling All Musicians</span><span><i>/</i></span>
     </div>
 </div>
@@ -98,12 +90,10 @@ $totalVacancies = $db->query("SELECT COUNT(*) FROM vacancies WHERE status='Open'
                 <p class="meta mb-3"><i class="fas fa-map-marker-alt me-2"></i><?= htmlspecialchars($v['basecamp_location']) ?></p>
                 <span class="badge-instrument mt-auto"><i class="fas fa-guitar me-1"></i><?= htmlspecialchars($v['needed_instrument']) ?></span>
             </div>
-            <div class="card-footer d-flex gap-2">
-                <a href="/pages/vacancy_detail.php?id=<?= $v['id'] ?>" class="btn btn-sm btn-outline-warning flex-grow-1">Detail</a>
-                <button class="btn btn-sm btn-success" aria-label="Hubungi via WhatsApp"
-                        onclick="hubungiWhatsApp('<?= htmlspecialchars($v['whatsapp_number']) ?>','<?= htmlspecialchars(addslashes($v['band_name'])) ?>','<?= htmlspecialchars(addslashes($v['title'])) ?>')">
-                    <i class="fab fa-whatsapp"></i>
-                </button>
+            <div class="card-footer">
+                <a href="/pages/vacancy_detail.php?id=<?= $v['id'] ?>" class="btn btn-sm btn-outline-warning w-100">
+                    Detail &amp; Daftar
+                </a>
             </div>
         </article>
     </div>

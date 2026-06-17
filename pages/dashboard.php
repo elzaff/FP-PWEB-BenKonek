@@ -140,6 +140,17 @@ if ($user['role'] === 'musician') {
     ];
 }
 
+$pendingCount = 0;
+if ($user['role'] === 'band' && !empty($profile['id'])) {
+    $pc = $db->prepare("SELECT COUNT(*) FROM connections WHERE band_id=? AND status='Pending'");
+    $pc->bind_param("i", $profile['id']); $pc->execute();
+    $pendingCount = (int)$pc->get_result()->fetch_row()[0];
+} elseif ($user['role'] === 'musician' && !empty($profile['id'])) {
+    $pc = $db->prepare("SELECT COUNT(*) FROM connections WHERE musician_id=? AND status='Pending'");
+    $pc->bind_param("i", $profile['id']); $pc->execute();
+    $pendingCount = (int)$pc->get_result()->fetch_row()[0];
+}
+
 require_once '../includes/header.php';
 ?>
 
@@ -150,6 +161,16 @@ require_once '../includes/header.php';
     </span>
 </div>
 
+<?php if (in_array($user['role'], ['musician','band'], true)): ?>
+<a href="/pages/connections.php" class="card p-3 mb-4 d-flex flex-row align-items-center justify-content-between text-decoration-none" style="color:var(--ink);">
+    <span class="fw-semibold">
+        <i class="fas fa-inbox me-2" style="color:var(--rust);"></i>
+        <?= $user['role'] === 'band' ? 'Pendaftar lowonganmu' : 'Lamaran yang kamu kirim' ?>
+    </span>
+    <span class="badge bg-warning"><?= $pendingCount ?> menunggu</span>
+</a>
+<?php endif; ?>
+
 <?php if ($user['role'] === 'musician'): ?>
 <?php $profileIncomplete = empty($profile['primary_instrument']) || empty($profile['whatsapp_number']); ?>
 <?php if ($profileIncomplete): ?>
@@ -158,7 +179,7 @@ require_once '../includes/header.php';
         <span class="kicker flex-shrink-0">Penting</span>
         <div>
             <p class="fw-bold mb-1" style="font-family:var(--font-display);font-size:1.05rem;text-transform:uppercase;letter-spacing:-0.02em;">Profilmu belum lengkap</p>
-            <p class="meta mb-2">Isi instrumen utama + nomor WA supaya band bisa nemuin kamu di direktori Musisi dan langsung ngobrol.</p>
+            <p class="meta mb-2">Isi instrumen utama + kontak biar profilmu lengkap dan gampang dilirik band saat kamu mendaftar lowongan.</p>
             <a href="#musician-form" class="btn btn-sm btn-warning"><i class="fas fa-arrow-down me-1"></i>Lengkapi Sekarang</a>
         </div>
     </div>
@@ -268,7 +289,7 @@ require_once '../includes/header.php';
         <span class="kicker flex-shrink-0" style="border-color:var(--teal);color:var(--teal);">Langkah 2</span>
         <div>
             <p class="fw-bold mb-1" style="font-family:var(--font-display);font-size:1.05rem;text-transform:uppercase;letter-spacing:-0.02em;">Buat lowongan pertama</p>
-            <p class="meta mb-2">Pasang di papan sekarang. Musisi yang cocok langsung bisa hubungi via WA.</p>
+            <p class="meta mb-2">Pasang di papan sekarang. Musisi yang cocok bisa langsung mendaftar.</p>
             <a href="/pages/vacancy_form.php" class="btn btn-sm btn-warning"><i class="fas fa-plus me-1"></i>Buat Lowongan</a>
         </div>
     </div>

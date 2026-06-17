@@ -24,7 +24,7 @@ $currentUser = getCurrentUser();
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Spline+Sans:wght@400;500;600;700&family=Spline+Sans+Mono:wght@400;500;600&family=Gochi+Hand&display=swap">
-    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/style.css?v=20260617-2">
 </head>
 <body>
 
@@ -41,7 +41,9 @@ $currentUser = getCurrentUser();
             <ul class="navbar-nav me-auto">
                 <li class="nav-item"><a class="nav-link <?= ($currentPath === '/index.php' || $currentPath === '/') ? 'active' : '' ?>" href="/index.php">Beranda</a></li>
                 <li class="nav-item"><a class="nav-link <?= (strpos($currentPath, '/pages/gigboard') === 0) ? 'active' : '' ?>" href="/pages/gigboard.php">GigBoard</a></li>
-                <li class="nav-item"><a class="nav-link <?= (strpos($currentPath, '/pages/musicians') === 0) ? 'active' : '' ?>" href="/pages/musicians.php">Musisi</a></li>
+                <?php if ($currentUser && in_array($currentUser['role'], ['musician','band'], true)): ?>
+                <li class="nav-item"><a class="nav-link <?= (strpos($currentPath, '/pages/connections') === 0) ? 'active' : '' ?>" href="/pages/connections.php">Pendaftaran</a></li>
+                <?php endif; ?>
                 <?php if ($currentUser && $currentUser['role'] === 'admin'): ?>
                 <li class="nav-item"><a class="nav-link <?= (strpos($currentPath, '/pages/users') === 0) ? 'active' : '' ?>" href="/pages/users.php">User</a></li>
                 <li class="nav-item"><a class="nav-link <?= (strpos($currentPath, '/pages/rbac') === 0) ? 'active' : '' ?>" href="/pages/rbac.php">RBAC</a></li>

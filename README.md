@@ -1,6 +1,6 @@
 # BenKonek
 
-BenKonek adalah aplikasi web untuk mempertemukan musisi dan band. Musisi dapat membuat profil, mencari lowongan band di GigBoard, lalu menghubungi band langsung melalui WhatsApp. Band dapat membuat profil, memasang lowongan personel, mengedit status lowongan, dan menghapus lowongan yang sudah tidak dibutuhkan.
+BenKonek adalah aplikasi web untuk mempertemukan musisi dan band lewat alur pendaftaran lowongan. Band dapat membuat profil, memasang lowongan personel, mengecek daftar musisi yang mendaftar, menerima atau menolak kandidat, dan mencetak daftar pendaftar. Musisi dapat membuat profil, mencari lowongan di GigBoard, lalu mendaftar ke lowongan yang dipilih dengan data profilnya.
 
 Tagline dari dokumen spesifikasi: **Calling All Musicians, Satu Klik Menuju Band Impianmu**.
 
@@ -13,9 +13,9 @@ Tagline dari dokumen spesifikasi: **Calling All Musicians, Satu Klik Menuju Band
 
 ## Ringkasan
 
-BenKonek dibuat untuk menjawab masalah konektivitas di skena musik lokal. Pencarian personel band lewat obrolan, grup media sosial, atau rekomendasi teman sering sulit difilter berdasarkan instrumen, lokasi, dan kebutuhan proyek. Aplikasi ini mengubah proses tersebut menjadi direktori dan papan lowongan yang lebih rapi.
+BenKonek dibuat untuk menjawab masalah konektivitas di skena musik lokal. Pencarian personel band lewat obrolan, grup media sosial, atau rekomendasi teman sering sulit difilter berdasarkan instrumen, lokasi, dan kebutuhan proyek. Aplikasi ini mengubah proses tersebut menjadi papan lowongan dan pendaftaran kandidat yang lebih rapi.
 
-Spesifikasi awal di `docs/Spesifikasi_BenKonek.pdf` menggambarkan aplikasi matchmaking profesional dengan direktori musisi, profil portofolio, Gig Board, filter pencarian, dan komunikasi langsung via WhatsApp. Implementasi repository ini memakai PHP native, MySQLi, Bootstrap 5, CSS3, dan JavaScript vanilla agar sesuai konteks tugas PWEB.
+Spesifikasi awal di `docs/Spesifikasi_BenKonek.pdf` menggambarkan aplikasi matchmaking profesional dengan profil portofolio, Gig Board, filter pencarian, dan pertemuan antar pengguna. Implementasi repository ini memakai PHP native, MySQLi, Bootstrap 5, CSS3, dan JavaScript vanilla agar sesuai konteks tugas PWEB. Alur yang dipakai sekarang adalah pendaftaran lowongan, bukan chat internal.
 
 ## Fitur Utama
 
@@ -25,9 +25,10 @@ Spesifikasi awal di `docs/Spesifikasi_BenKonek.pdf` menggambarkan aplikasi match
 - Dashboard berbeda sesuai role yang login.
 - Profil musisi berisi nama, kota, instrumen utama, level pengalaman, portofolio, WhatsApp, dan foto.
 - Profil band berisi nama band, tahun terbentuk, genre, basecamp, WhatsApp, dan foto.
-- GigBoard dengan daftar lowongan, filter instrumen, filter kota, realtime search, detail lowongan, dan pagination.
+- GigBoard dengan daftar lowongan, filter instrumen, filter kota, realtime search, detail lowongan, tombol daftar, dan pagination.
+- Profil musisi bersifat privat: hanya musisi pemilik yang mengelola profilnya, dan band hanya melihat detail musisi yang sudah mendaftar ke lowongan band tersebut.
 - CRUD lowongan untuk role band.
-- Tombol WhatsApp direct redirect melalui JavaScript.
+- Pendaftaran lowongan: musisi mengirim lamaran, band melihat daftar pendaftar, menerima/menolak kandidat, dan mencetak daftar besar berisi semua pendaftar.
 - Admin dashboard untuk statistik sistem.
 - Manajemen user oleh admin: create, read, update, delete, reset password, ubah role, dan ubah status aktif.
 - Tabel RBAC dan matriks keamanan CRUD untuk tugas PWEB bagian 4.
@@ -36,9 +37,9 @@ Spesifikasi awal di `docs/Spesifikasi_BenKonek.pdf` menggambarkan aplikasi match
 
 | Role | Hak akses utama |
 | --- | --- |
-| Guest | Melihat Beranda, GigBoard, Detail Lowongan, dan Direktori Musisi. |
-| Musician | Login, mengelola profil musisi sendiri, membaca lowongan, dan menghubungi band via WhatsApp. |
-| Band | Login, mengelola profil band sendiri, membuat, membaca, mengubah, menutup, membuka, dan menghapus lowongan milik sendiri. |
+| Guest | Melihat Beranda, GigBoard, dan Detail Lowongan. |
+| Musician | Login, mengelola profil musisi sendiri, membaca lowongan, mendaftar lowongan, dan melihat status lamaran sendiri. |
+| Band | Login, mengelola profil band sendiri, membuat/membaca/mengubah/menutup/membuka/menghapus lowongan milik sendiri, melihat pendaftar, menerima/menolak kandidat, dan mencetak daftar pendaftar. |
 | Admin | Mengelola user, melihat statistik, membaca tabel RBAC, dan membaca matriks keamanan CRUD. |
 
 Halaman dokumentasi RBAC tersedia di `pages/rbac.php` setelah login sebagai admin.
@@ -57,40 +58,38 @@ Halaman dokumentasi RBAC tersedia di `pages/rbac.php` setelah login sebagai admi
 
 ```text
 benkonek/
-├── assets/
-│   ├── css/
-│   │   └── style.css
-│   ├── images/
-│   │   └── uploads/
-│   └── js/
-│       └── main.js
-├── config/
-│   ├── database.example.php
-│   ├── database.php
-│   └── session.php
-├── database/
-│   ├── setup.sql
-│   └── dummy_data.sql
-├── docs/
-│   ├── PRODUCT.md
-│   └── Spesifikasi_BenKonek.pdf
-├── includes/
-│   ├── footer.php
-│   └── header.php
-├── pages/
-│   ├── dashboard.php
-│   ├── gigboard.php
-│   ├── login.php
-│   ├── logout.php
-│   ├── musicians.php
-│   ├── rbac.php
-│   ├── register.php
-│   ├── users.php
-│   ├── vacancy_detail.php
-│   └── vacancy_form.php
-├── .gitignore
-├── index.php
-└── README.md
+  assets/
+    css/style.css
+    images/
+    js/main.js
+  config/
+    database.example.php
+    database.php
+    session.php
+  database/
+    setup.sql
+    dummy_data.sql
+  docs/
+    PRODUCT.md
+    Spesifikasi_BenKonek.pdf
+  includes/
+    footer.php
+    header.php
+  pages/
+    connect.php
+    connections.php
+    dashboard.php
+    gigboard.php
+    login.php
+    logout.php
+    rbac.php
+    register.php
+    struk.php
+    users.php
+    vacancy_detail.php
+    vacancy_form.php
+  index.php
+  README.md
 ```
 
 Catatan: `config/database.php` dipakai untuk konfigurasi lokal dan diabaikan oleh Git. Gunakan `config/database.example.php` sebagai template.
@@ -139,7 +138,7 @@ http://127.0.0.1:8000
 | Musician | `fazle.mawla.wahyuhanda@student.benkonek.test` | `password123` |
 | Band | `modjoermakmoer@band.benkonek.test` | `password123` |
 
-File `database/dummy_data.sql` berisi 47 akun musisi dari daftar nama tugas, 10 akun band dummy, dan 15 lowongan.
+File `database/dummy_data.sql` berisi 47 akun musisi dari daftar nama tugas, 10 akun band dummy, 15 lowongan, dan contoh data pendaftaran lowongan.
 
 ## Database
 
@@ -149,6 +148,7 @@ Tabel utama:
 - `musicians`
 - `bands`
 - `vacancies`
+- `connections`
 
 Tabel RBAC:
 
@@ -158,7 +158,7 @@ Tabel RBAC:
 - `role_permissions`
 - `crud_security_matrix`
 
-Struktur database mengikuti inti spesifikasi BenKonek: user, profil musisi, profil band, dan lowongan. Implementasi tambahan RBAC dipakai untuk pembagian akses dan dokumentasi tugas PWEB.
+Struktur database mengikuti inti spesifikasi BenKonek: user, profil musisi, profil band, lowongan, dan pendaftaran lowongan. Implementasi tambahan RBAC dipakai untuk pembagian akses dan dokumentasi tugas PWEB.
 
 ## Keamanan
 
@@ -175,10 +175,10 @@ Struktur database mengikuti inti spesifikasi BenKonek: user, profil musisi, prof
 Modul yang sudah diimplementasikan:
 
 - Autentikasi: registrasi, login, logout.
-- Profil Musisi: data personal, instrumen, pengalaman, portofolio, kontak WhatsApp.
+- Profil Musisi: data personal, instrumen, pengalaman, portofolio, kontak WhatsApp; detailnya tidak dibuka sebagai direktori publik.
 - Profil Band: data band, genre, lokasi basecamp, kontak WhatsApp.
 - GigBoard: pembuatan lowongan, pencarian, filter, detail, status open/closed.
-- WhatsApp Redirect: kontak langsung tanpa chat internal.
+- Pendaftaran Lowongan: musisi mendaftar lowongan, band melihat pendaftar, menerima/menolak kandidat, dan mencetak daftar pendaftar.
 - Admin: statistik sistem, manajemen user, RBAC, dan matriks CRUD.
 
 Rencana pengembangan lanjutan dari dokumen spesifikasi:
@@ -193,6 +193,9 @@ Rencana pengembangan lanjutan dari dokumen spesifikasi:
 ```powershell
 C:\laragon\bin\php\php-8.3.30-Win32-vs16-x64\php.exe -l index.php
 C:\laragon\bin\php\php-8.3.30-Win32-vs16-x64\php.exe -l pages\login.php
+C:\laragon\bin\php\php-8.3.30-Win32-vs16-x64\php.exe -l pages\connect.php
+C:\laragon\bin\php\php-8.3.30-Win32-vs16-x64\php.exe -l pages\connections.php
+C:\laragon\bin\php\php-8.3.30-Win32-vs16-x64\php.exe -l pages\struk.php
 C:\laragon\bin\php\php-8.3.30-Win32-vs16-x64\php.exe -l pages\users.php
 C:\laragon\bin\php\php-8.3.30-Win32-vs16-x64\php.exe -l pages\rbac.php
 ```

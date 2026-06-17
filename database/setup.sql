@@ -81,6 +81,21 @@ CREATE TABLE IF NOT EXISTS vacancies (
     FOREIGN KEY (band_id) REFERENCES bands(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
+-- Pendaftaran musisi ke lowongan band (satu-satunya alur pendaftaran).
+CREATE TABLE IF NOT EXISTS connections (
+    id          INT AUTO_INCREMENT PRIMARY KEY,
+    musician_id INT NOT NULL,
+    band_id     INT NOT NULL,
+    vacancy_id  INT NOT NULL,
+    message     VARCHAR(500) NULL,
+    status      ENUM('Pending','Accepted','Rejected') DEFAULT 'Pending',
+    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uniq_apply (musician_id, vacancy_id),
+    FOREIGN KEY (musician_id) REFERENCES musicians(id) ON DELETE CASCADE,
+    FOREIGN KEY (band_id)     REFERENCES bands(id)     ON DELETE CASCADE,
+    FOREIGN KEY (vacancy_id)  REFERENCES vacancies(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
 
 CREATE TABLE IF NOT EXISTS app_modules (
     id          INT AUTO_INCREMENT PRIMARY KEY,
@@ -132,9 +147,10 @@ INSERT INTO app_modules (module_key, module_name, description) VALUES
 ('musician_profiles', 'Profil Musisi', 'Data profil musisi, instrumen, pengalaman, portfolio, dan WhatsApp.'),
 ('band_profiles', 'Profil Band', 'Data profil band, genre, basecamp, tahun terbentuk, dan WhatsApp.'),
 ('vacancies', 'Lowongan Band', 'CRUD lowongan personel band di GigBoard.'),
-('public_catalog', 'Direktori Publik', 'Halaman GigBoard, detail lowongan, dan direktori musisi.'),
+('public_catalog', 'Katalog Lowongan', 'Halaman beranda, GigBoard, dan detail lowongan terbuka.'),
 ('user_management', 'Manajemen User', 'Admin membuat, membaca, mengubah, menghapus, dan menonaktifkan akun.'),
-('rbac_docs', 'Dokumentasi RBAC', 'Identifikasi modul, role, RBAC, dan matriks keamanan CRUD.')
+('rbac_docs', 'Dokumentasi RBAC', 'Identifikasi modul, role, RBAC, dan matriks keamanan CRUD.'),
+('connections', 'Pendaftaran Lowongan', 'Musisi mendaftar lowongan band, band kelola status pendaftar, dan cetak daftar pendaftar.')
 ON DUPLICATE KEY UPDATE
 module_name = VALUES(module_name),
 description = VALUES(description);
@@ -151,9 +167,9 @@ description = VALUES(description);
 INSERT INTO permissions (permission_key, module_key, action, description) VALUES
 ('auth.login', 'auth', 'read', 'Masuk ke aplikasi dengan akun aktif.'),
 ('dashboard.read', 'dashboard', 'read', 'Melihat dashboard sesuai role.'),
-('catalog.read', 'public_catalog', 'read', 'Membaca GigBoard, detail lowongan, dan direktori musisi.'),
+('catalog.read', 'public_catalog', 'read', 'Membaca beranda, GigBoard, dan detail lowongan terbuka.'),
 ('musician_profile.create', 'musician_profiles', 'create', 'Membuat profil musisi.'),
-('musician_profile.read', 'musician_profiles', 'read', 'Membaca profil musisi.'),
+('musician_profile.read', 'musician_profiles', 'read', 'Membaca profil musisi sendiri atau profil pendaftar yang relevan.'),
 ('musician_profile.update', 'musician_profiles', 'update', 'Mengubah profil musisi milik sendiri.'),
 ('band_profile.create', 'band_profiles', 'create', 'Membuat profil band.'),
 ('band_profile.read', 'band_profiles', 'read', 'Membaca profil band.'),
@@ -164,7 +180,11 @@ INSERT INTO permissions (permission_key, module_key, action, description) VALUES
 ('vacancy.delete', 'vacancies', 'delete', 'Band menghapus lowongan milik sendiri.'),
 ('vacancy.manage_status', 'vacancies', 'manage', 'Band membuka atau menutup lowongan milik sendiri.'),
 ('user.manage', 'user_management', 'manage', 'Admin mengelola akun user.'),
-('rbac.read', 'rbac_docs', 'read', 'Admin membaca tabel RBAC dan matriks CRUD.')
+('rbac.read', 'rbac_docs', 'read', 'Admin membaca tabel RBAC dan matriks CRUD.'),
+('connection.apply', 'connections', 'create', 'Musisi mendaftar ke sebuah lowongan band.'),
+('connection.read', 'connections', 'read', 'Melihat daftar pendaftar (band) atau lamaran sendiri (musisi).'),
+('connection.manage_status', 'connections', 'manage', 'Band menerima atau menolak pendaftar lowongannya.'),
+('connection.print', 'connections', 'read', 'Band mencetak daftar pendaftar lowongannya untuk seleksi lanjutan.')
 ON DUPLICATE KEY UPDATE
 module_key = VALUES(module_key),
 action = VALUES(action),
@@ -189,24 +209,39 @@ SELECT 'band', id FROM permissions WHERE permission_key IN (
 );
 
 INSERT IGNORE INTO role_permissions (role_code, permission_id)
+SELECT 'musician', id FROM permissions WHERE permission_key IN (
+    'connection.apply','connection.read'
+);
+
+INSERT IGNORE INTO role_permissions (role_code, permission_id)
+SELECT 'band', id FROM permissions WHERE permission_key IN (
+    'connection.read','connection.manage_status','connection.print'
+);
+
+INSERT IGNORE INTO role_permissions (role_code, permission_id)
 SELECT 'admin', id FROM permissions;
+
+DELETE rp FROM role_permissions rp
+JOIN permissions p ON rp.permission_id = p.id
+WHERE rp.role_code IN ('musician', 'admin')
+  AND p.permission_key = 'connection.print';
 
 INSERT INTO crud_security_matrix
 (module_key, role_code, can_create, can_read, can_update, can_delete, scope_note) VALUES
-('public_catalog', 'guest', 0, 1, 0, 0, 'Guest bisa membaca GigBoard, detail lowongan, dan direktori musisi.'),
+('public_catalog', 'guest', 0, 1, 0, 0, 'Guest bisa membaca beranda, GigBoard, dan detail lowongan terbuka.'),
 ('public_catalog', 'musician', 0, 1, 0, 0, 'Musisi login bisa membaca katalog publik.'),
 ('public_catalog', 'band', 0, 1, 0, 0, 'Band login bisa membaca katalog publik.'),
 ('public_catalog', 'admin', 0, 1, 0, 0, 'Admin bisa membaca katalog publik.'),
-('musician_profiles', 'guest', 0, 1, 0, 0, 'Guest hanya membaca profil publik di direktori.'),
-('musician_profiles', 'musician', 1, 1, 1, 0, 'Musisi hanya membuat dan mengubah profil sendiri.'),
-('musician_profiles', 'band', 0, 1, 0, 0, 'Band membaca data musisi untuk rekrutmen.'),
+('musician_profiles', 'guest', 0, 0, 0, 0, 'Guest tidak bisa melihat detail profil musisi.'),
+('musician_profiles', 'musician', 1, 1, 1, 0, 'Musisi hanya membuat, membaca, dan mengubah profil sendiri.'),
+('musician_profiles', 'band', 0, 1, 0, 0, 'Band hanya membaca detail musisi yang sudah mendaftar ke lowongan band tersebut.'),
 ('musician_profiles', 'admin', 1, 1, 1, 1, 'Admin dapat mengelola akun dan data terkait melalui manajemen user/database.'),
 ('band_profiles', 'guest', 0, 1, 0, 0, 'Guest membaca info band melalui lowongan.'),
 ('band_profiles', 'musician', 0, 1, 0, 0, 'Musisi membaca profil band dari detail lowongan.'),
 ('band_profiles', 'band', 1, 1, 1, 0, 'Band hanya membuat dan mengubah profil sendiri.'),
 ('band_profiles', 'admin', 1, 1, 1, 1, 'Admin dapat mengelola akun dan data terkait melalui manajemen user/database.'),
 ('vacancies', 'guest', 0, 1, 0, 0, 'Guest hanya membaca lowongan terbuka.'),
-('vacancies', 'musician', 0, 1, 0, 0, 'Musisi membaca lowongan dan menghubungi band.'),
+('vacancies', 'musician', 0, 1, 0, 0, 'Musisi membaca lowongan dan mendaftar lewat formulir pendaftaran.'),
 ('vacancies', 'band', 1, 1, 1, 1, 'Band CRUD hanya untuk lowongan milik band sendiri.'),
 ('vacancies', 'admin', 1, 1, 1, 1, 'Admin dapat mengawasi data lowongan melalui database.'),
 ('user_management', 'guest', 0, 0, 0, 0, 'Guest tidak punya akses manajemen user.'),
@@ -216,7 +251,11 @@ INSERT INTO crud_security_matrix
 ('rbac_docs', 'guest', 0, 0, 0, 0, 'Guest tidak melihat tabel RBAC.'),
 ('rbac_docs', 'musician', 0, 0, 0, 0, 'Musisi tidak melihat tabel RBAC.'),
 ('rbac_docs', 'band', 0, 0, 0, 0, 'Band tidak melihat tabel RBAC.'),
-('rbac_docs', 'admin', 0, 1, 0, 0, 'Admin membaca identifikasi modul, role, RBAC, dan matriks CRUD.')
+('rbac_docs', 'admin', 0, 1, 0, 0, 'Admin membaca identifikasi modul, role, RBAC, dan matriks CRUD.'),
+('connections', 'guest', 0, 0, 0, 0, 'Guest tidak bisa mendaftar lowongan.'),
+('connections', 'musician', 1, 1, 0, 0, 'Musisi membuat lamaran dan membaca status lamaran sendiri.'),
+('connections', 'band', 0, 1, 1, 0, 'Band membaca pendaftar lowongannya, menerima/menolak, dan mencetak daftar pendaftar.'),
+('connections', 'admin', 1, 1, 1, 1, 'Admin dapat mengawasi seluruh data pendaftaran melalui database.')
 ON DUPLICATE KEY UPDATE
 can_create = VALUES(can_create),
 can_read = VALUES(can_read),

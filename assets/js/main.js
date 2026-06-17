@@ -8,22 +8,6 @@ var BK = {
 };
 
 
-function hubungiWhatsApp(nomor, namaTarget, judul) {
-    if (!nomor) {
-        Swal.fire({
-            icon: 'warning', title: 'Nomor WhatsApp tidak tersedia',
-            toast: true, position: 'top-end',
-            showConfirmButton: false, timer: 2500,
-            background: BK.paper, color: BK.ink, iconColor: BK.rust
-        });
-        return;
-    }
-    var cleaned = nomor.replace(/\D/g, '').replace(/^0/, '62');
-    var pesan = encodeURIComponent('Halo ' + namaTarget + '! Saya tertarik dengan "' + judul + '" di BenKonek.');
-    window.open('https://wa.me/' + cleaned + '?text=' + pesan, '_blank');
-}
-
-
 function konfirmasiHapus(url, pesan) {
     pesan = pesan || 'Data ini akan dihapus permanen!';
     Swal.fire({

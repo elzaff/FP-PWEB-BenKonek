@@ -9,7 +9,7 @@ if (!$id) { header('Location: /pages/gigboard.php'); exit; }
 $db   = getDB();
 $stmt = $db->prepare("
     SELECT v.*, b.band_name, b.formation_year, b.main_genre, b.basecamp_location,
-           b.whatsapp_number, b.photo_profile, b.user_id AS band_user_id, b.id AS band_id
+           b.photo_profile, b.user_id AS band_user_id, b.id AS band_id
     FROM vacancies v
     JOIN bands b ON v.band_id = b.id
     WHERE v.id = ?
@@ -26,6 +26,19 @@ if (!$vacancy) {
 $isOwner = isLoggedIn()
     && $_SESSION['role'] === 'band'
     && (int)$_SESSION['user_id'] === (int)$vacancy['band_user_id'];
+
+$currentMusicianId = null;
+$myApplication     = null;
+if (isLoggedIn() && $_SESSION['role'] === 'musician') {
+    $ms = $db->prepare("SELECT id FROM musicians WHERE user_id = ?");
+    $ms->bind_param("i", $_SESSION['user_id']); $ms->execute();
+    $currentMusicianId = $ms->get_result()->fetch_assoc()['id'] ?? null;
+    if ($currentMusicianId) {
+        $as = $db->prepare("SELECT status FROM connections WHERE musician_id=? AND vacancy_id=?");
+        $as->bind_param("ii", $currentMusicianId, $id); $as->execute();
+        $myApplication = $as->get_result()->fetch_assoc();
+    }
+}
 
 if ($isOwner && $_SERVER['REQUEST_METHOD'] === 'POST') {
     verifyCsrf();
@@ -93,11 +106,39 @@ require_once '../includes/header.php';
             <p style="color:var(--ink-soft);white-space:pre-wrap;"><?= htmlspecialchars($vacancy['description']) ?></p>
             <?php endif; ?>
 
-            <?php if ($vacancy['status'] === 'Open'): ?>
-            <button class="btn btn-success btn-lg w-100 mt-3"
-                    onclick="hubungiWhatsApp('<?= htmlspecialchars($vacancy['whatsapp_number']) ?>','<?= htmlspecialchars(addslashes($vacancy['band_name'])) ?>','<?= htmlspecialchars(addslashes($vacancy['title'])) ?>')">
-                <i class="fab fa-whatsapp me-2"></i>Hubungi via WhatsApp
-            </button>
+            <?php if (!$isOwner): ?>
+                <?php if (isLoggedIn() && $_SESSION['role'] === 'musician'): ?>
+                    <?php if ($myApplication): ?>
+                    <?php $st = ['Pending'=>'Menunggu','Accepted'=>'Diterima','Rejected'=>'Ditolak'][$myApplication['status']] ?? $myApplication['status']; ?>
+                    <div class="alert alert-info mt-3 mb-0">
+                        <i class="fas fa-check-circle me-2"></i>Kamu sudah mendaftar — status: <strong><?= htmlspecialchars($st) ?></strong>.
+                        <a href="/pages/connections.php" class="alert-link">Lihat di Pendaftaran</a>.
+                    </div>
+                    <?php elseif (!$currentMusicianId): ?>
+                    <a href="/pages/dashboard.php" class="btn btn-warning btn-lg w-100 mt-3">
+                        <i class="fas fa-user-edit me-2"></i>Lengkapi Profil Musisi untuk Mendaftar
+                    </a>
+                    <?php elseif ($vacancy['status'] === 'Open'): ?>
+                    <form method="POST" action="/pages/connect.php" class="mt-3">
+                        <input type="hidden" name="_csrf" value="<?= csrfToken() ?>">
+                        <input type="hidden" name="action" value="apply">
+                        <input type="hidden" name="vacancy_id" value="<?= $id ?>">
+                        <textarea name="message" class="form-control mb-2" rows="2"
+                                  maxlength="500" placeholder="Pesan singkat ke band (opsional)"></textarea>
+                        <button type="submit" class="btn btn-success btn-lg w-100">
+                            <i class="fas fa-paper-plane me-2"></i>Daftar Lowongan Ini
+                        </button>
+                    </form>
+                    <?php else: ?>
+                    <button class="btn btn-secondary btn-lg w-100 mt-3" disabled>
+                        <i class="fas fa-lock me-2"></i>Lowongan Ditutup
+                    </button>
+                    <?php endif; ?>
+                <?php elseif (!isLoggedIn()): ?>
+                <a href="/pages/login.php" class="btn btn-success btn-lg w-100 mt-3">
+                    <i class="fas fa-sign-in-alt me-2"></i>Masuk untuk Mendaftar
+                </a>
+                <?php endif; ?>
             <?php endif; ?>
 
             <?php if ($isOwner): ?>

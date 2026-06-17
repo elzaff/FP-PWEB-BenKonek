@@ -43,7 +43,7 @@ $totalPages = (int)ceil($totalRows / $perPage);
 
 $allParams = array_merge($params, [$perPage, $offset]);
 $allTypes  = $types . 'ii';
-$sql = "SELECT v.*, b.band_name, b.basecamp_location, b.whatsapp_number, b.main_genre
+$sql = "SELECT v.*, b.band_name, b.basecamp_location, b.main_genre
         FROM vacancies v JOIN bands b ON v.band_id=b.id
         WHERE $whereSQL ORDER BY v.created_at DESC LIMIT ? OFFSET ?";
 $stmt = $db->prepare($sql);
@@ -153,10 +153,16 @@ $pageUrl = function(int $p) use ($filterInstrument, $filterCity): string {
                         <div class="d-flex flex-column gap-2 ms-3">
                             <a href="/pages/vacancy_detail.php?id=<?= $v['id'] ?>"
                                class="btn btn-sm btn-outline-warning">Detail</a>
-                            <button class="btn btn-sm btn-success" aria-label="Hubungi via WhatsApp"
-                                    onclick="hubungiWhatsApp('<?= htmlspecialchars($v['whatsapp_number']) ?>','<?= htmlspecialchars(addslashes($v['band_name'])) ?>','<?= htmlspecialchars(addslashes($v['title'])) ?>')">
-                                <i class="fab fa-whatsapp me-1"></i>WA
-                            </button>
+                            <?php if (isset($currentUser) && $currentUser['role'] === 'musician'): ?>
+                            <form method="POST" action="/pages/connect.php">
+                                <input type="hidden" name="_csrf" value="<?= csrfToken() ?>">
+                                <input type="hidden" name="action" value="apply">
+                                <input type="hidden" name="vacancy_id" value="<?= $v['id'] ?>">
+                                <button type="submit" class="btn btn-sm btn-success w-100" aria-label="Daftar lowongan ini">
+                                    <i class="fas fa-paper-plane me-1"></i>Daftar
+                                </button>
+                            </form>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
